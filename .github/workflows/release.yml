@@ -195,14 +195,39 @@ jobs:
           RELEASE_ZIP: ${{ steps.package.outputs.zip }}
           RELEASE_LAUNCHER: ${{ steps.package.outputs.launcher }}
         run: |
-          $arguments = @(
-            'release', 'create', $env:RELEASE_TAG, $env:RELEASE_ZIP, $env:RELEASE_LAUNCHER,
-            '--repo', $env:GITHUB_REPOSITORY,
-            '--title', $env:RELEASE_TAG,
-            '--generate-notes'
-          )
-          if ($env:RELEASE_PRERELEASE -eq 'true') {
-            $arguments += '--prerelease'
+          $viewArguments = @('release', 'view', $env:RELEASE_TAG, '--repo', $env:GITHUB_REPOSITORY)
+          & gh @viewArguments *> $null
+          $releaseExists = $LASTEXITCODE -eq 0
+
+          if ($releaseExists) {
+            $editArguments = @(
+              'release', 'edit', $env:RELEASE_TAG,
+              '--repo', $env:GITHUB_REPOSITORY,
+              '--title', $env:RELEASE_TAG
+            )
+            if ($env:RELEASE_PRERELEASE -eq 'true') {
+              $editArguments += '--prerelease'
+            }
+            & gh @editArguments
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            $uploadArguments = @(
+              'release', 'upload', $env:RELEASE_TAG, $env:RELEASE_ZIP, $env:RELEASE_LAUNCHER,
+              '--repo', $env:GITHUB_REPOSITORY,
+              '--clobber'
+            )
+            & gh @uploadArguments
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          } else {
+            $createArguments = @(
+              'release', 'create', $env:RELEASE_TAG, $env:RELEASE_ZIP, $env:RELEASE_LAUNCHER,
+              '--repo', $env:GITHUB_REPOSITORY,
+              '--title', $env:RELEASE_TAG,
+              '--generate-notes'
+            )
+            if ($env:RELEASE_PRERELEASE -eq 'true') {
+              $createArguments += '--prerelease'
+            }
+            & gh @createArguments
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
-          & gh @arguments
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
