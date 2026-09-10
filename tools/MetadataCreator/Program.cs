@@ -18,7 +18,7 @@ namespace MetadataCreator
 {
     internal class Program
     {
-        private const string DefaultFileRootPath = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher-Builds/master";
+        private const string DefaultFileRootPath = "https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/main/releases";
         public static readonly string[] SupportedFileEndings = {".exe", ".dll"};
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

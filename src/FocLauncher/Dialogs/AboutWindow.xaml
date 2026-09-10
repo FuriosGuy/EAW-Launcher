@@ -13,7 +13,17 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Launcher by AnakinSklavenwalker"/>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="EMPIRE AT WAR Launcher" FontWeight="Bold"/>
+            <TextBlock Text="Heavily modified and maintained by FuriosGuy" Margin="0,3,0,0"/>
+            <TextBlock Text="Based on the original launcher by AnakinSklavenwalker" Margin="0,3,0,0"/>
+            <TextBlock Margin="0,3,0,0">
+                <Hyperlink NavigateUri="https://github.com/FuriosGuy/EAW-Launcher"
+                           RequestNavigate="OpenRepositorySite">
+                    Project repository
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
         <Grid Grid.Row="1" TextElement.Foreground="SlateGray" Opacity=".8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -26,7 +36,7 @@
                     <TextBlock HorizontalAlignment="Right">           
                         <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-nd/4.0/"
                                    RequestNavigate="OpenLicenseSite">
-                            Licence
+                                   License
                         </Hyperlink>
                     </TextBlock>
                 </DockPanel>

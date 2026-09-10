@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("Foc Launcher Core Library")]
+[assembly: AssemblyTitle("EMPIRE AT WAR Launcher Core Library")]
 [assembly: AssemblyDescription("Contains constants and primitive classes, shared across the launcher.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Republic at War Modding Team")]
-[assembly: AssemblyProduct("FoC Launcher")]
-[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
+[assembly: AssemblyCompany("FuriosGuy")]
+[assembly: AssemblyProduct("EMPIRE AT WAR Launcher")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker; modifications © 2026 FuriosGuy")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,5 +28,5 @@ using System.Runtime.InteropServices;
 //      Buildnummer
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.3")]
-[assembly: AssemblyFileVersion("1.0.0.3")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

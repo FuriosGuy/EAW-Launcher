@@ -3,35 +3,64 @@
                     xmlns:controls="clr-namespace:FocLauncher.Controls"
                     xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
 
-    <FontFamily x:Key="EaWFont">/FocLauncher.Core;component/Resources/Fonts/#Empire At War Bold</FontFamily>
-
     <Style TargetType="{x:Type controls:PlayButton}">
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SelectionTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="18,10"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:PlayButton}">
-                    <Border x:Name="Border" 
-                            Background="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBackground}}" 
-                            TextElement.Foreground="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonText}}" 
-                            BorderBrush="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBorder}}" 
-                            BorderThickness="2">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}"
+                            TextElement.Foreground="{TemplateBinding Foreground}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="PlayScale" ScaleX="1" ScaleY="1"/>
+                        </Border.RenderTransform>
                         <TextBlock Text="{TemplateBinding Text}" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                       FontFamily="{StaticResource EaWFont}" FontSize="22"/>
+                                   FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                                   FontWeight="{TemplateBinding FontWeight}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBackgroundHover}}"/>
-                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonText}}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBorder}}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource DarkTextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PlayScale" Storyboard.TargetProperty="ScaleX"
+                                                         To="1.025" Duration="0:0:0.14"/>
+                                        <DoubleAnimation Storyboard.TargetName="PlayScale" Storyboard.TargetProperty="ScaleY"
+                                                         To="1.025" Duration="0:0:0.14"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PlayScale" Storyboard.TargetProperty="ScaleX"
+                                                         To="1" Duration="0:0:0.10"/>
+                                        <DoubleAnimation Storyboard.TargetName="PlayScale" Storyboard.TargetProperty="ScaleY"
+                                                         To="1" Duration="0:0:0.10"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBackgroundPressed}}"/>
-                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonTextPressed}}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBorderPressed}}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource PrimaryPressedBrush}"/>
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource SelectionTextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBackgroundDisabled}}"/>
-                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonTextDisabled}}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.PlayButtonBorderDisabled}}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBrush}"/>
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource DisabledTextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

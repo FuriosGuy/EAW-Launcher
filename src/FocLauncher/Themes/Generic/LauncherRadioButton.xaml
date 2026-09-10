@@ -8,14 +8,16 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Rectangle Margin="14,0,0,0" StrokeThickness="1" StrokeDashArray="1 2" SnapsToDevicePixels="true"
-                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                               Stroke="{DynamicResource PrimaryBrush}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style TargetType="{x:Type controls:LauncherRadioButton}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxText}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -30,10 +32,9 @@
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" VerticalAlignment="Top">
                                 <Ellipse x:Name="OuterEllipse" Width="16" Height="16" UseLayoutRounding="True" 
-                                         Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorder}}" 
-                                         Fill="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackground}}" StrokeThickness="1"/>
+                                         Stroke="{DynamicResource BorderStrongBrush}" Fill="{DynamicResource PanelBrush}" StrokeThickness="1"/>
                                 <Ellipse x:Name="InnerEllipse" Width="8" Height="8" UseLayoutRounding="True"
-                                         Fill="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyph}}" Visibility="Hidden"/>
+                                         Fill="{DynamicResource PrimaryBrush}" Visibility="Hidden"/>
                             </Grid>
                             <ContentPresenter Grid.Column="1" Margin="{TemplateBinding Padding}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -51,14 +52,19 @@
                             <Setter TargetName="InnerEllipse" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="OuterEllipse" Property="Stroke" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderHover}}" />
-                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundHover}}" />
-                            <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphHover}}" />
+                            <Setter TargetName="OuterEllipse" Property="Stroke" Value="{DynamicResource PrimaryBrush}" />
+                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource HoverBrush}" />
+                            <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource PrimaryHoverBrush}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="OuterEllipse" Property="Stroke" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderDown}}" />
-                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundDown}}" />
-                            <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphDown}}" />
+                            <Setter TargetName="OuterEllipse" Property="Stroke" Value="{DynamicResource PrimaryHoverBrush}" />
+                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource PrimaryPressedBrush}" />
+                            <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource SelectionTextBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="OuterEllipse" Property="Stroke" Value="{DynamicResource PrimaryHoverBrush}" />
+                            <Setter TargetName="OuterEllipse" Property="Fill" Value="{DynamicResource SelectedBrush}" />
+                            <Setter TargetName="InnerEllipse" Property="Fill" Value="{DynamicResource PrimaryBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

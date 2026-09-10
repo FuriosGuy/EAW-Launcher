@@ -47,7 +47,7 @@ namespace FocLauncher.Game
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     var data = new WaitDialogProgressData("Waiting for Steam...", isCancelable: true);
-                    using var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                    using var s = WaitDialogFactory.Instance.StartWaitDialog("EMPIRE AT WAR Launcher", data, TimeSpan.FromSeconds(2));
                     SteamClient.Instance.StartSteam();
                     try
                     {

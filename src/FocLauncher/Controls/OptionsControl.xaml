@@ -22,25 +22,25 @@
     <controls:LauncherExpander x:Name="Expander" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.CaptionText}}" FlowDirection="RightToLeft"
                       ExpandDirection="Up" Margin="0,0,8,0">
         <Expander.Header>
-            <TextBlock Text="Launch Options" FontWeight="Bold"/>
+            <TextBlock Text="Launch options" FontWeight="Bold"/>
         </Expander.Header>
         <StackPanel FlowDirection="LeftToRight" Margin="0,0,16,8">
 
-            <TextBlock Margin="0,0,0,0" Text="General Options" FontWeight="Bold" 
+            <TextBlock Margin="0,0,0,0" Text="General options" FontWeight="Bold"
                        Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <DockPanel Margin="16,0,0,0">
-                <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" Style="{StaticResource ArgumentCheckBox}"
-                                           IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use debug build" Style="{StaticResource ArgumentCheckBox}"
+                                           IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance},
                 Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                            Visibility="{Binding Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
 
                 <controls:LauncherCheckBox Content="Windowed" Style="{StaticResource ArgumentCheckBox}"
-                                           IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                                           IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance},
                     Path=Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </DockPanel>
 
-            <TextBlock Margin="0,8,0,0" Text="Language Options" FontWeight="Bold" 
+            <TextBlock Margin="0,8,0,0" Text="Language options" FontWeight="Bold"
                        Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <Grid>
@@ -60,31 +60,31 @@
                         </TextBlock>
                     </controls:LauncherRadioButton>
                     <controls:LauncherCheckBox Margin="32,4,0,0"
-                                               IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                                               IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance},
                         Path=FallbackToEnglish, Mode=TwoWay}">
-                        <TextBlock Text="Fallback to English if Game/Mod does not support system language." TextWrapping="Wrap"/>
+                        <TextBlock Text="Fallback to English if the game or mod does not support the system language." TextWrapping="Wrap"/>
                         <CheckBox.IsEnabled>
                             <Binding ElementName="SystemLangBox" Path="IsChecked"/>
                         </CheckBox.IsEnabled>
                     </controls:LauncherCheckBox>
                 </StackPanel>
                 <DockPanel Grid.Row="2" >
-                    <controls:LauncherRadioButton x:Name="UseCustomBox" GroupName="LanguageGroup" Margin="16,8,0,0" Content="Use Custom:"/>
-                    <controls:WatermarkedTextBox Margin="16,8,32,0" Watermark="Enter English Language Name..." 
+                    <controls:LauncherRadioButton x:Name="UseCustomBox" GroupName="LanguageGroup" Margin="16,8,0,0" Content="Use custom:"/>
+                    <controls:WatermarkedTextBox Margin="16,8,32,0" Watermark="Enter English language name..."
                                                  IsEnabled="{Binding ElementName=UseCustomBox, Path=IsChecked}"
-                                                 Text="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                                                 Text="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance},
                         Path=CustomLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DockPanel>
             </Grid>
 
-            <TextBlock Margin="0,8,0,0" Text="Advanced Options" FontWeight="Bold" 
+            <TextBlock Margin="0,8,0,0" Text="Advanced options" FontWeight="Bold"
                        Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <DockPanel Margin="16,0,0,0">
                 <controls:LauncherCheckBox Content="IgnoreAsserts"
                                            IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                            Style="{StaticResource ArgumentCheckBox}"/>
-                <controls:LauncherCheckBox Content="No art process" IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <controls:LauncherCheckBox Content="Disable art processing" IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                            Style="{StaticResource ArgumentCheckBox}"/>
             </DockPanel>
         </StackPanel>

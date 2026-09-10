@@ -4,9 +4,14 @@
 set MS_BUILD_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
 set BUILD_PLATFORM="Any CPU"
 
-set METADATA_OUTPUT="gen"
-set CURRENT_METADATA_LOCATION="https://republicatwar.com/downloads/FocLauncher/LauncherUpdateData.xml"
-set COPY_FILES_LOCATION="C:\Users\Anakin\source\repos\AnakinSklavenwalker\FoC-Mod-Launcher-Builds"
+set METADATA_OUTPUT="releases"
+set CURRENT_METADATA_LOCATION="https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/main/releases/LauncherUpdateData.xml"
+rem Override EAW_LAUNCHER_BUILDS when using a separate artifact repository.
+if defined EAW_LAUNCHER_BUILDS (
+    set COPY_FILES_LOCATION="%EAW_LAUNCHER_BUILDS%"
+) else (
+    set COPY_FILES_LOCATION="%~dp0releases"
+)
 
 set METADATA_CREATOR_BIN=".\tools\MetadataCreator\bin"
 set METADATA_CREATOR_FILE="MetadataCreator.exe"
@@ -117,4 +122,4 @@ exit /b 0
 :fail 
 echo operation failed...
 pause 
-exit /b 1 
+exit /b 1

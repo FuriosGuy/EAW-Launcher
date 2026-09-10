@@ -10,7 +10,7 @@
     <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextUnfocused}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="TextBoxBase.CaretBrush">
@@ -18,7 +18,8 @@
                 <Binding RelativeSource="{RelativeSource Self}" Path="Foreground"/>
             </Setter.Value>
         </Setter>
-        <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxSelection}}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="SelectionTextBrush" Value="{DynamicResource TextBrush}"/>
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="MaxLines" Value="1"/>
         <Setter Property="MaxLength" Value="100"/>
@@ -26,8 +27,8 @@
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border Padding="0,2,0,2" Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border Padding="0,2,0,2" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
                         <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
                     </Border>
                 </ControlTemplate>
@@ -36,12 +37,14 @@
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextDisabled}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource DisabledTextBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type controls:WatermarkedTextBox}">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="Local"/>
         <Setter Property="KeyboardNavigation.IsTabStop" Value="false"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
@@ -49,16 +52,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:WatermarkedTextBox}">
                     <Grid SnapsToDevicePixels="True">
-                        <Border x:Name="Border" 
-                                Background="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBackground}}" 
-                                BorderBrush="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBorder}}"
-                                BorderThickness="1"/>
+                        <Border x:Name="Border" Background="{DynamicResource AppBackgroundBrush}" BorderBrush="{DynamicResource BorderStrongBrush}"
+                                BorderThickness="1" CornerRadius="8"/>
                         <AccessText x:Name="Watermark" Margin="5,1,5,1"
                                     Text="{TemplateBinding Watermark}"
-                                    Foreground="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxWatermark}}" 
+                                    Foreground="{DynamicResource DisabledTextBrush}"
                                     Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                         <TextBox x:Name="RealTextBox" Style="{StaticResource TextBoxStyle}" Padding="4,1,4,1"
-                                 Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                 Text="{Binding RelativeSource={RelativeSource TemplatedParent},
                             Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -76,33 +77,33 @@
                         </Trigger>
                         <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
                             <Setter TargetName="Watermark" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxWatermarkHover}}"/>
+                                Value="{DynamicResource MutedTextBrush}"/>
                             <Setter TargetName="Border" Property="Border.BorderBrush"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBorderFocused}}"/>
+                                Value="{DynamicResource PrimaryBrush}"/>
                             <Setter TargetName="Border" Property="Panel.Background"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBackgroundFocused}}"/>
+                                Value="{DynamicResource PanelBrush}"/>
                             <Setter TargetName="RealTextBox" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextFocused}}"/>
+                                Value="{DynamicResource TextBrush}"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsMouseOver" Value="true">
                             <Setter TargetName="Watermark" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxWatermarkHover}}"/>
+                                Value="{DynamicResource MutedTextBrush}"/>
                             <Setter TargetName="Border" Property="Border.BorderBrush"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBorderHover}}"/>
+                                Value="{DynamicResource ControlHoverBorderBrush}"/>
                             <Setter TargetName="Border" Property="Panel.Background"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBackgroundHover}}"/>
+                                Value="{DynamicResource PanelBrush}"/>
                             <Setter TargetName="RealTextBox" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextHover}}"/>
+                                Value="{DynamicResource TextBrush}"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsEnabled" Value="false">
                             <Setter TargetName="Watermark" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextDisabled}}"/>
+                                Value="{DynamicResource DisabledTextBrush}"/>
                             <Setter TargetName="RealTextBox" Property="TextElement.Foreground"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxTextDisabled}}"/>
+                                Value="{DynamicResource DisabledTextBrush}"/>
                             <Setter TargetName="Border" Property="Border.BorderBrush"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBorderDisabled}}"/>
+                                Value="{DynamicResource BorderBrush}"/>
                             <Setter TargetName="Border" Property="Panel.Background"
-                                Value="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxBackgroundDisabled}}"/>
+                                Value="{DynamicResource AppBackgroundBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

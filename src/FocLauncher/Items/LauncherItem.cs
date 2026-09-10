@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 using EawModinfo.Spec;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;
+using FocLauncher.Profiles;
 using FocLauncher.Utilities;
+using HtmlAgilityPack;
 using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Items
@@ -26,14 +27,33 @@ namespace FocLauncher.Items
 
         public string Text { get; private set; } = "Resolving name...";
 
-        // TODO: Get async from GameObject
-        public ImageSource? ImageSource { get; }
+        public string? IconFile { get; private set; }
 
         public LauncherItemManager Manager { get; }
 
         public IPetroglyhGameableObject GameObject { get; }
 
         public int Depth => GameObject is IGame ? 0 : 1;
+
+        public bool IsMod => GameObject is IMod;
+
+        public string ModKey => GameObject is IMod mod ? ProfileModKey.FromMod(mod) : string.Empty;
+
+        public string ModSource => GameObject is IMod mod && mod.Type == ModType.Workshops ? "Workshop" : "Local";
+
+        private bool _isLoadSelected;
+
+        public bool IsLoadSelected
+        {
+            get => _isLoadSelected;
+            set
+            {
+                if (value == _isLoadSelected)
+                    return;
+                _isLoadSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
         IInvocationController IHasInvocationController.InvocationController => LauncherItemInvocationController.Instance;
 
@@ -45,7 +65,7 @@ namespace FocLauncher.Items
             Manager = manager;
             GameObject = gameObject;
             _commandHandler = new LauncherGameObjectCommandHandler(GameObject);
-            SetNameAsync().Forget();
+            SetNameAndIconAsync().Forget();
         }
 
         public override string ToString()
@@ -68,15 +88,21 @@ namespace FocLauncher.Items
             return items;
         }
 
-        private async Task SetNameAsync()
+        private async Task SetNameAndIconAsync()
         {
             if (!(GameObject is Mod mod))
             {
                 Text = GameObject.Name;
+                IconFile = GameObject.IconFile;
+                OnPropertyChanged(nameof(IconFile));
                 return;
             }
 
             var name = mod.ModInfo?.Name;
+            HtmlDocument? workshopPage = null;
+            if (mod.WorkshopMod)
+                workshopPage = await HtmlDownloader.GetSteamModPageDocumentAsync(mod.Identifier);
+
             if (string.IsNullOrEmpty(name))
             {
                 var folderName = mod.Directory.Name;
@@ -90,8 +116,7 @@ namespace FocLauncher.Items
                         break;
                     case ModType.Workshops:
                     {
-                        var doc = await HtmlDownloader.GetSteamModPageDocumentAsync(folderName);
-                        name = new WorkshopNameResolver().GetName(doc, folderName);
+                        name = new WorkshopNameResolver().GetName(workshopPage, folderName);
                         SteamModNamePersister.Instance.AddModName(folderName, name);
                         break;
                     }
@@ -103,6 +128,9 @@ namespace FocLauncher.Items
 
             Text = name!;
             OnPropertyChanged(nameof(Text));
+
+            IconFile = await mod.ResolveIconFileAsync(workshopPage);
+            OnPropertyChanged(nameof(IconFile));
         }
         
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

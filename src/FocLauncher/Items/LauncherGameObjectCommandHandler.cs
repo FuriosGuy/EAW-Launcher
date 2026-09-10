@@ -53,7 +53,7 @@ namespace FocLauncher.Items
             var args = gameArgs.ToArgs();
             var message = $"Launch Arguments for Mod {GameObject.Name}:\r\n\r\n{args}\r\n\r\nMod's location: '{mod.Identifier}'";
 
-            Task.Run(() => MessageBox.Show(message, "FoC Launcher", MessageBoxButton.OK)).Forget();
+            Task.Run(() => MessageBox.Show(message, "EMPIRE AT WAR Launcher", MessageBoxButton.OK)).Forget();
         }
 
         internal static bool Launch(IPetroglyhGameableObject gameObject, IReadOnlyList<IPetroglyhGameableObject>? linkedGameObjects = null)
@@ -65,7 +65,7 @@ namespace FocLauncher.Items
             catch (Exception e)
             {
                 MessageBox.Show($"Unable to start {gameObject.Name}:\r\n" +
-                                e.Message, "FoC Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
+                                e.Message, "EMPIRE AT WAR Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
@@ -102,10 +102,18 @@ namespace FocLauncher.Items
 
             if (mod != null)
             {
-                var modList = GetAllMods(mod);
+                IList<IMod>? modList = linkedGameObjects?.OfType<IMod>().Distinct().ToList();
+                if (modList is null || !modList.Any())
+                    modList = GetAllMods(mod);
                 if (!modList.Any()) 
                     throw new InvalidOperationException("The selected mod object seems to be invalid.");
                 args.Mods = modList;
+            }
+            else
+            {
+                var modList = linkedGameObjects?.OfType<IMod>().Distinct().ToList();
+                if (modList?.Any() == true)
+                    args.Mods = modList;
             }
 
             args.Language = gameOptions.GetLanguageFromOptions(gameObject);

@@ -244,7 +244,8 @@ namespace FocLauncher.Controls
 
         protected void SetRoundRect(IntPtr hWnd, int width, int height)
         {
-            var roundRectRegion = ComputeRoundRectRegion(0, 0, width, height);
+            var cornerRadius = WindowState == WindowState.Maximized ? 0 : 18;
+            var roundRectRegion = ComputeRoundRectRegion(0, 0, width, height, cornerRadius);
             User32.SetWindowRgn(hWnd, roundRectRegion, User32.IsWindowVisible(hWnd));
         }
 
@@ -346,9 +347,9 @@ namespace FocLauncher.Controls
             User32.SetWindowRgn(hWnd, rectRgnIndirect, User32.IsWindowVisible(hWnd));
         }
 
-        private static IntPtr ComputeRoundRectRegion(int left, int top, int width, int height)
+        private static IntPtr ComputeRoundRectRegion(int left, int top, int width, int height, int cornerRadius)
         {
-            return Gdi32.CreateRoundRectRgn(left, top, left + width + 1, top + height + 1, 0, 0);
+            return Gdi32.CreateRoundRectRgn(left, top, left + width + 1, top + height + 1, cornerRadius, cornerRadius);
         }
 
         private static void UpdateZOrderOfOwner(IntPtr hwndOwner)
@@ -385,6 +386,7 @@ namespace FocLauncher.Controls
                 return new IntPtr(0);
             var point1 = new Point(NativeMethods.NativeMethods.GetXlParam(lParam.ToInt32()),
                 NativeMethods.NativeMethods.GetYlParam(lParam.ToInt32()));
+
             var point2 = PointFromScreen(point1);
             DependencyObject visualHit = null;
             VisualUtilities.HitTestVisibleElements(this, target =>
@@ -404,9 +406,46 @@ namespace FocLauncher.Controls
             }
 
             if (num == 0)
+            {
+                var resizeHitTest = GetResizeHitTest(point1);
+                if (resizeHitTest != 0)
+                {
+                    handled = true;
+                    return new IntPtr(resizeHitTest);
+                }
+            }
+
+            if (num == 0)
                 num = 1;
             handled = true;
             return new IntPtr(num);
+        }
+
+        private int GetResizeHitTest(Point screenPoint)
+        {
+            if (WindowState != WindowState.Normal ||
+                (ResizeMode != ResizeMode.CanResize && ResizeMode != ResizeMode.CanResizeWithGrip))
+                return 0;
+
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (hwnd == IntPtr.Zero || !User32.GetWindowRect(hwnd, out var bounds))
+                return 0;
+
+            const int resizeBorder = 8;
+            var left = screenPoint.X >= bounds.Left && screenPoint.X < bounds.Left + resizeBorder;
+            var right = screenPoint.X < bounds.Right && screenPoint.X >= bounds.Right - resizeBorder;
+            var top = screenPoint.Y >= bounds.Top && screenPoint.Y < bounds.Top + resizeBorder;
+            var bottom = screenPoint.Y < bounds.Bottom && screenPoint.Y >= bounds.Bottom - resizeBorder;
+
+            if (top && left) return 13;      // HTTOPLEFT
+            if (top && right) return 14;     // HTTOPRIGHT
+            if (bottom && left) return 16;   // HTBOTTOMLEFT
+            if (bottom && right) return 17;  // HTBOTTOMRIGHT
+            if (left) return 10;             // HTLEFT
+            if (right) return 11;            // HTRIGHT
+            if (top) return 12;              // HTTOP
+            if (bottom) return 15;            // HTBOTTOM
+            return 0;
         }
 
         private void WmSysCommand(IntPtr hWnd, IntPtr wParam)

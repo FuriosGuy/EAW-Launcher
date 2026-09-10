@@ -7,7 +7,7 @@
     <ProjectGuid>{91330941-11BE-41AA-BD4C-8D3A70399395}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>FocLauncherHost</RootNamespace>
-    <AssemblyName>FoC Launcher</AssemblyName>
+    <AssemblyName>EMPIRE AT WAR Launcher</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -27,7 +27,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>2.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <Nullable>enable</Nullable>

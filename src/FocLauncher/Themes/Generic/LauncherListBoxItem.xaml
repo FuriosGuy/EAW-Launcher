@@ -8,47 +8,107 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type controls:LauncherListBoxItem}">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemBackground}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemBorder}}"/>
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemText}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:LauncherListBoxItem}">
-                    <Border x:Name="ItemBorder" SnapsToDevicePixels="True" Background="{TemplateBinding Background}"
-                             BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                             TextBlock.Foreground="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemText}}">
-                        <Grid>
-                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="True" Margin="5,0,2,0" 
-                                              ContentTemplate="{StaticResource ItemDataTemplate}"/>
-                        </Grid>
+                        <Border x:Name="ItemBorder" SnapsToDevicePixels="True" ClipToBounds="False" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Margin="2,3"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                TextBlock.Foreground="{TemplateBinding Foreground}">
+                            <Grid>
+                                <Border x:Name="SelectionGlow" Background="{DynamicResource PrimaryBrush}" CornerRadius="7" Opacity="0"
+                                        IsHitTestVisible="False"/>
+                                <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="True" Margin="8,0,6,0"
+                                                  ContentTemplate="{StaticResource ItemDataTemplate}"/>
+                                <Border x:Name="DropIndicatorTop" Height="3" Margin="8,0" VerticalAlignment="Top"
+                                        Background="{DynamicResource DropIndicatorBrush}" CornerRadius="2" Visibility="Collapsed" IsHitTestVisible="False"/>
+                                <Border x:Name="DropIndicatorBottom" Height="3" Margin="8,0" VerticalAlignment="Bottom"
+                                        Background="{DynamicResource DropIndicatorBrush}" CornerRadius="2" Visibility="Collapsed" IsHitTestVisible="False"/>
+                            </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemHoverBackground}}"/>
+                            <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
                             <Setter TargetName="ItemBorder" Property="TextBlock.Foreground" 
-                                    Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemHoverText}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemHoverBorder}}"/>
+                                    Value="{DynamicResource TextBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemSelectedBackground}}"/>
+                            <Setter Property="Background" Value="{DynamicResource SelectedBrush}"/>
                             <Setter TargetName="ItemBorder" Property="TextBlock.Foreground" 
-                                    Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemSelectedText}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemSelectedBorder}}"/>
+                                    Value="{DynamicResource SelectionTextBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectionGlow" Storyboard.TargetProperty="Opacity"
+                                                         To="0.14" Duration="0:0:0.18"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectionGlow" Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.14"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="ListBoxItem.IsSelected" Value="true"/>
                                 <Condition Property="Selector.IsSelectionActive" Value="false"/>
                             </MultiTrigger.Conditions>
-                            <Setter Property="Control.Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemInactiveBackground}}"/>
+                            <Setter Property="Control.Background" Value="{DynamicResource SelectedInactiveBrush}"/>
                             <Setter TargetName="ItemBorder" Property="TextBlock.Foreground" 
-                                    Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemInactiveText}}"/>
-                            <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemInactiveBorder}}"/>
+                                    Value="{DynamicResource TextSecondaryBrush}"/>
+                            <Setter Property="Control.BorderBrush" Value="{DynamicResource BorderStrongBrush}"/>
                         </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsDropTarget" Value="True"/>
+                                <Condition Property="DropInsertAfter" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="DropIndicatorTop" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="DropIndicatorTop" Property="Opacity" Value="1"/>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                        <DoubleAnimation Storyboard.TargetName="DropIndicatorTop" Storyboard.TargetProperty="Opacity"
+                                                         From="0.45" To="1" Duration="0:0:0.55"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsDropTarget" Value="True"/>
+                                <Condition Property="DropInsertAfter" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="DropIndicatorBottom" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="DropIndicatorBottom" Property="Opacity" Value="1"/>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                        <DoubleAnimation Storyboard.TargetName="DropIndicatorBottom" Storyboard.TargetProperty="Opacity"
+                                                         From="0.45" To="1" Duration="0:0:0.55"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
+                        <Trigger Property="IsDragSource" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Opacity" Value="0.62"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

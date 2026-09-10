@@ -5,7 +5,10 @@ using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.Win32;
+using FocLauncher.Theming;
 
 namespace FocLauncherHost.Dialogs
 {
@@ -27,7 +30,38 @@ namespace FocLauncherHost.Dialogs
         public ExceptionWindow(Exception exception)
         {
             InitializeComponent();
+            HostWindow.WindowStyle = WindowStyle.None;
+            HostWindow.AllowsTransparency = true;
+            HostWindow.Background = Brushes.Transparent;
+            HostWindow.ResizeMode = ResizeMode.NoResize;
+            HostWindow.ShowInTaskbar = false;
+            HostWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ApplyThemeResources();
             Exception = exception;
+        }
+
+        private void ApplyThemeResources()
+        {
+            try
+            {
+                var themeUri = ThemeManager.GetSavedThemeResourceUri();
+                Resources.MergedDictionaries.Add(new ResourceDictionary {Source = themeUri});
+            }
+            catch
+            {
+                // The error dialog must remain usable if the theme assembly is damaged.
+            }
+        }
+
+        private void OnTitleBarMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                HostWindow.DragMove();
+        }
+
+        private void OnClose(object sender, RoutedEventArgs e)
+        {
+            HostWindow.Close();
         }
 
         public override void ShowDialog()
@@ -47,7 +81,7 @@ namespace FocLauncherHost.Dialogs
                 return;
 
             var sb = new StringBuilder();
-            sb.AppendLine("FoC Launcher error log");
+            sb.AppendLine("EMPIRE AT WAR Launcher error log");
             sb.AppendLine();
             sb.AppendLine(Exception.ToString());
 

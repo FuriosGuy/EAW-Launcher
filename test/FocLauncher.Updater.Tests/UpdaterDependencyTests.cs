@@ -16,14 +16,14 @@ namespace FocLauncher.Updater.Tests
     [TestClass]
     public class UpdaterDependencyTests
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EMPIRE AT WAR Launcher");
         private UpdateManager _updateManager;
 
         [TestInitialize]
         public void SetUpdateManager()
         {
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
-            _updateManager = new TestUpdateManager(new Product(), @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
+            _updateManager = new TestUpdateManager(new Product(), Path.Combine(Path.GetTempPath(), "eaw-launcher-update.xml"));
         }
 
         [TestMethod]
@@ -208,7 +208,7 @@ namespace FocLauncher.Updater.Tests
         {
             public string Name { get; } = "FoC-Launcher";
             public string Author { get; }
-            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EMPIRE AT WAR Launcher");
             public string CurrentLocation => GetType().Assembly.Location;
         }
     }

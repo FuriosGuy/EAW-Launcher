@@ -1,73 +1,1237 @@
-﻿<baseControls:ShadowChromeWindow x:Class="FocLauncher.MainWindow"
+<baseControls:ShadowChromeWindow x:Class="FocLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
-        xmlns:converters="clr-namespace:FocLauncher.Converters"
-        xmlns:controls="clr-namespace:FocLauncher.Controls"
-        xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls" 
         xmlns:focLauncher="clr-namespace:FocLauncher"
-        Title="FoC Mod Launcher" Width="400" 
-        Height="700" 
-        Foreground="White"
+        xmlns:controls="clr-namespace:FocLauncher.Controls"
+        xmlns:converters="clr-namespace:FocLauncher.Converters"
+        xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls"
+        Title="EMPIRE AT WAR Launcher"
+        Width="980"
+        Height="720"
+        MinWidth="760"
+        MinHeight="520"
+        Foreground="{DynamicResource TextBrush}"
+        FontFamily="Segoe UI"
+        FontSize="13"
+        Background="{DynamicResource AppBackgroundBrush}"
+        HasMaximizeButton="True"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True"
-        Closing="MainWindow_OnClosing">
+        Closing="MainWindow_OnClosing"
+        Loaded="MainWindow_OnLoaded"
+        SizeChanged="MainWindow_OnSizeChanged"
+        PreviewKeyDown="MainWindow_OnPreviewKeyDown">
     <Window.Resources>
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource AppBackgroundColor}"/>
+        <SolidColorBrush x:Key="SidebarBrush" Color="{DynamicResource SidebarColor}"/>
+        <SolidColorBrush x:Key="PanelBrush" Color="{DynamicResource PanelColor}"/>
+        <SolidColorBrush x:Key="PanelRaisedBrush" Color="{DynamicResource PanelRaisedColor}"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="{DynamicResource BorderColor}"/>
+        <SolidColorBrush x:Key="BorderStrongBrush" Color="{DynamicResource BorderStrongColor}"/>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{DynamicResource PrimaryHoverColor}"/>
+        <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{DynamicResource PrimaryPressedColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}"/>
+        <SolidColorBrush x:Key="AccentHoverBrush" Color="{DynamicResource AccentHoverColor}"/>
+        <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextColor}"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="{DynamicResource TextSecondaryColor}"/>
+        <SolidColorBrush x:Key="MutedTextBrush" Color="{DynamicResource MutedTextColor}"/>
+        <SolidColorBrush x:Key="DisabledBrush" Color="{DynamicResource DisabledColor}"/>
+        <SolidColorBrush x:Key="DisabledTextBrush" Color="{DynamicResource DisabledTextColor}"/>
+        <SolidColorBrush x:Key="SelectedBrush" Color="{DynamicResource SelectedColor}"/>
+        <SolidColorBrush x:Key="SelectedTranslucentBrush" Color="{DynamicResource SelectedColor}" Opacity="0.86"/>
+        <SolidColorBrush x:Key="SelectedInactiveBrush" Color="{DynamicResource SelectedInactiveColor}"/>
+        <SolidColorBrush x:Key="HoverBrush" Color="{DynamicResource HoverColor}"/>
+        <SolidColorBrush x:Key="HoverBorderBrush" Color="{DynamicResource HoverBorderColor}"/>
+        <SolidColorBrush x:Key="ControlHoverBorderBrush" Color="{DynamicResource ControlHoverBorderColor}"/>
+        <SolidColorBrush x:Key="HandleBrush" Color="{DynamicResource HandleColor}"/>
+        <SolidColorBrush x:Key="IconBackgroundBrush" Color="{DynamicResource IconBackgroundColor}"/>
+        <SolidColorBrush x:Key="OverlayBrush" Color="{DynamicResource OverlayColor}"/>
+        <SolidColorBrush x:Key="OverlayTranslucentBrush" Color="{DynamicResource OverlayColor}" Opacity="0.81"/>
+        <SolidColorBrush x:Key="OverlayBackdropBrush" Color="{DynamicResource OverlayBackdropColor}"/>
+        <SolidColorBrush x:Key="DropIndicatorBrush" Color="{DynamicResource DropIndicatorColor}"/>
+        <SolidColorBrush x:Key="SelectionTextBrush" Color="{DynamicResource SelectionTextColor}"/>
+        <SolidColorBrush x:Key="DarkTextBrush" Color="{DynamicResource DarkTextColor}"/>
+        <SolidColorBrush x:Key="TitleBarBrush" Color="{DynamicResource TitleBarColor}"/>
+        <SolidColorBrush x:Key="TitleBarTranslucentBrush" Color="{DynamicResource TitleBarColor}" Opacity="0.74"/>
+        <SolidColorBrush x:Key="SidebarTranslucentBrush" Color="{DynamicResource SidebarColor}" Opacity="0.82"/>
+        <SolidColorBrush x:Key="PanelTranslucentBrush" Color="{DynamicResource PanelColor}" Opacity="0.75"/>
+        <SolidColorBrush x:Key="AcrylicSidebarTintBrush" Color="{DynamicResource SidebarColor}" Opacity="0.74"/>
+        <SolidColorBrush x:Key="AcrylicPanelTintBrush" Color="{DynamicResource PanelColor}" Opacity="0.69"/>
+        <SolidColorBrush x:Key="TitleBarTextBrush" Color="{DynamicResource TitleBarTextColor}"/>
+        <SolidColorBrush x:Key="WindowGlyphBrush" Color="{DynamicResource WindowGlyphColor}"/>
+        <SolidColorBrush x:Key="WindowInactiveBrush" Color="{DynamicResource WindowInactiveColor}"/>
+        <SolidColorBrush x:Key="WindowInactiveTextBrush" Color="{DynamicResource WindowInactiveTextColor}"/>
+        <LinearGradientBrush x:Key="MainHeaderGradientBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{DynamicResource OverlayBackdropColor}" Offset="0"/>
+            <GradientStop Color="{DynamicResource OverlayBackdropColor}" Offset="0.42"/>
+            <GradientStop Color="#00000000" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="MainFooterGradientBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#00000000" Offset="0"/>
+            <GradientStop Color="{DynamicResource OverlayBackdropColor}" Offset="0.5"/>
+            <GradientStop Color="{DynamicResource OverlayBackdropColor}" Offset="1"/>
+        </LinearGradientBrush>
+        <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
+        <DropShadowEffect x:Key="OverlayShadowEffect" Color="#000000" BlurRadius="28" ShadowDepth="8" Opacity="0.45"/>
+        <BlurEffect x:Key="ArtworkBlurEffect" Radius="180" RenderingBias="Performance"/>
+        <BlurEffect x:Key="AcrylicBlurEffect" Radius="28" RenderingBias="Performance"/>
+
+        <Style x:Key="AcrylicBackdropStyle" TargetType="{x:Type controls:AcrylicBackdrop}">
+            <Setter Property="Background" Value="{StaticResource AcrylicPanelTintBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type controls:AcrylicBackdrop}">
+                        <Grid ClipToBounds="True">
+                            <Image x:Name="BackdropImage" Source="{Binding ActiveGameBackgroundImage}" Stretch="UniformToFill"
+                                   HorizontalAlignment="Left" VerticalAlignment="Top" SnapsToDevicePixels="True" Opacity="0.96"
+                                   Effect="{StaticResource AcrylicBlurEffect}" IsHitTestVisible="False" Panel.ZIndex="0">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding UseGameArtwork}" Value="True"/>
+                                                    <Condition Binding="{Binding UseArtworkBackdrop, RelativeSource={RelativeSource AncestorType={x:Type controls:AcrylicBackdrop}}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}"
+                                    Padding="{TemplateBinding Padding}" Panel.ZIndex="1">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  ContentSource="Content"
+                                                  RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="OverlayComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ComboItemBorder" Background="{TemplateBinding Background}" CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ComboItemBorder" Property="Background" Value="{StaticResource HoverBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ComboItemBorder" Property="Background" Value="{StaticResource SelectedBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource SelectionTextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="OverlayComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Background" Value="{StaticResource PanelTranslucentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="MinHeight" Value="34"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource OverlayComboBoxItemStyle}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="ComboBorder" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid>
+                                    <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"/>
+                                    <ToggleButton x:Name="DropDownToggle" HorizontalAlignment="Stretch"
+                                                  HorizontalContentAlignment="Right" Padding="0,0,10,0"
+                                                  Focusable="False" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                  ClickMode="Press" Background="Transparent" BorderThickness="0">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Border Background="Transparent">
+                                                    <Path x:Name="DropDownArrow" Width="9" Height="5" Margin="0,0,10,0"
+                                                          HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                          Data="M 0,0 L 4.5,5 L 9,0" Stroke="{StaticResource MutedTextBrush}" StrokeThickness="1.5"
+                                                          RenderTransformOrigin="0.5,0.5">
+                                                        <Path.RenderTransform>
+                                                            <RotateTransform x:Name="DropDownArrowRotation" Angle="0"/>
+                                                        </Path.RenderTransform>
+                                                    </Path>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Trigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="DropDownArrowRotation" Storyboard.TargetProperty="Angle"
+                                                                                     To="180" Duration="0:0:0.16"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </Trigger.EnterActions>
+                                                        <Trigger.ExitActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="DropDownArrowRotation" Storyboard.TargetProperty="Angle"
+                                                                                     To="0" Duration="0:0:0.14"/>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </Trigger.ExitActions>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True" Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
+                                <Border Background="{StaticResource PanelBrush}" BorderBrush="{StaticResource BorderStrongBrush}" BorderThickness="1" CornerRadius="8" Padding="4"
+                                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ScrollViewer MaxHeight="260" VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="{StaticResource ControlHoverBorderBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ComboBorder" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SidebarItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="Background" Value="{StaticResource PanelTranslucentBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+            <Setter Property="Padding" Value="10,9"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" TextElement.Foreground="{TemplateBinding Foreground}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource HoverBrush}"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource HoverBorderBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource SelectedTranslucentBrush}"/>
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource SelectionTextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SidebarListStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource SidebarItemStyle}"/>
+        </Style>
+
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Background" Value="{StaticResource PanelTranslucentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="ToolbarScale" ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource HoverBrush}"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ToolbarScale" Storyboard.TargetProperty="ScaleX"
+                                                             To="1.02" Duration="0:0:0.12"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToolbarScale" Storyboard.TargetProperty="ScaleY"
+                                                             To="1.02" Duration="0:0:0.12"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ToolbarScale" Storyboard.TargetProperty="ScaleX"
+                                                             To="1" Duration="0:0:0.10"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToolbarScale" Storyboard.TargetProperty="ScaleY"
+                                                             To="1" Duration="0:0:0.10"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource PrimaryPressedBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SidebarActionButtonStyle" TargetType="Button" BasedOn="{StaticResource ToolbarButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource PanelTranslucentBrush}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="SidebarWideActionButtonStyle" TargetType="Button" BasedOn="{StaticResource SidebarActionButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompactSidebar, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SidebarOverflowButtonStyle" TargetType="Button" BasedOn="{StaticResource SidebarActionButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompactSidebar, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PresetItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource SidebarItemStyle}">
+            <Setter Property="Background" Value="{StaticResource PanelTranslucentBrush}"/>
+        </Style>
+
+        <Style x:Key="AccentButtonStyle" BasedOn="{StaticResource ToolbarButtonStyle}" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="AccentBorder" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="AccentScale" ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="AccentBorder" Property="Background" Value="{StaticResource AccentHoverBrush}"/>
+                                <Setter TargetName="AccentBorder" Property="BorderBrush" Value="{StaticResource PrimaryHoverBrush}"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AccentScale" Storyboard.TargetProperty="ScaleX"
+                                                             To="1.02" Duration="0:0:0.12"/>
+                                            <DoubleAnimation Storyboard.TargetName="AccentScale" Storyboard.TargetProperty="ScaleY"
+                                                             To="1.02" Duration="0:0:0.12"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AccentScale" Storyboard.TargetProperty="ScaleX"
+                                                             To="1" Duration="0:0:0.10"/>
+                                            <DoubleAnimation Storyboard.TargetName="AccentScale" Storyboard.TargetProperty="ScaleY"
+                                                             To="1" Duration="0:0:0.10"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="AccentBorder" Property="Background" Value="{StaticResource PrimaryPressedBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="AccentBorder" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SearchBoxStyle" TargetType="TextBox">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="SelectionTextBrush" Value="{StaticResource TextBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource TextBrush}"/>
+        </Style>
+
+        <DataTemplate x:Key="GameNavigationTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="36"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding IconFile}" Width="28" Height="28" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                    <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding Type, Converter={StaticResource GameTypeToStringConverter}}" FontSize="10" Foreground="{StaticResource MutedTextBrush}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ProfileNavigationTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="24" Height="24" CornerRadius="6" ClipToBounds="True"
+                        Background="Transparent" VerticalAlignment="Center"
+                        Visibility="{Binding ArtworkPath, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                    <Image Source="{Binding ArtworkPath, IsAsync=True}" Stretch="UniformToFill"/>
+                </Border>
+                <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="13" TextTrimming="CharacterEllipsis"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
-    <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="0"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid Margin="6,0">
+
+    <Grid x:Name="RootSurface" Background="Transparent">
+        <Image x:Name="ArtworkSurfaceImage" Source="{Binding ActiveGameBackgroundImage}" Stretch="UniformToFill"
+               IsHitTestVisible="False" Panel.ZIndex="0">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="Opacity" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding UseGameArtwork}" Value="True">
+                            <Setter Property="Opacity" Value="1"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+        <Image x:Name="ArtworkSurfaceTransitionImage" Stretch="UniformToFill" Opacity="0"
+               IsHitTestVisible="False" Panel.ZIndex="0"/>
+        <Grid x:Name="LauncherContent" Panel.ZIndex="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SidebarColumn" Width="224" MinWidth="170" MaxWidth="360"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" ClipToBounds="True">
+            <controls:AcrylicBackdrop Style="{StaticResource AcrylicBackdropStyle}"
+                                      Background="{StaticResource AcrylicSidebarTintBrush}"
+                                      BorderThickness="0" CornerRadius="0" IsHitTestVisible="False"/>
+            <Border Background="Transparent"
+                    SnapsToDevicePixels="True" Padding="18,22,14,16">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,12,0,12"/>
+                    <Button Content="⚙  Settings" Style="{StaticResource ToolbarButtonStyle}" HorizontalContentAlignment="Left"
+                            Click="OpenSettingsWindow" Margin="0,0,0,4"/>
+                    <Button Content="ⓘ  About" Style="{StaticResource ToolbarButtonStyle}" HorizontalContentAlignment="Left"
+                            Click="OpenAboutWindow" Margin="0"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="EMPIRE AT WAR" Foreground="{StaticResource PrimaryBrush}" FontSize="12" FontWeight="Bold"/>
+                    <TextBlock Text="Launcher" Foreground="{StaticResource TextBrush}" FontSize="20" FontWeight="Bold" Margin="0,2,0,26"/>
+
+                    <TextBlock Text="Games" Foreground="{StaticResource MutedTextBrush}" FontSize="10" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ListBox x:Name="GameSelector" ItemsSource="{Binding Games}" SelectedItem="{Binding ActiveGame, Mode=TwoWay}"
+                             ItemTemplate="{StaticResource GameNavigationTemplate}" ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                             Background="Transparent" BorderThickness="0" Padding="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" MinHeight="90"/>
+
+                    <Grid Margin="0,28,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Presets" Foreground="{StaticResource MutedTextBrush}" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="+" ToolTip="Create preset" Style="{StaticResource SidebarActionButtonStyle}"
+                                    Click="OpenNewPresetEditor"/>
+                            <Button Content="⧉" ToolTip="Clone preset" Style="{StaticResource SidebarWideActionButtonStyle}"
+                                    Command="{Binding DuplicateProfileCommand}"/>
+                            <Button ToolTip="Edit preset" Style="{StaticResource SidebarWideActionButtonStyle}"
+                                    Click="OpenEditPresetEditor">
+                                <Path Width="15" Height="15" Stretch="Uniform" Stroke="{DynamicResource MutedTextBrush}" StrokeThickness="1.35"
+                                      Data="M2,13 L3,9 L11,1 L14,4 L6,12 Z M10,2 L13,5"/>
+                            </Button>
+                            <Button ToolTip="Delete preset" Style="{StaticResource SidebarWideActionButtonStyle}"
+                                    Command="{Binding DeleteProfileCommand}">
+                                <Path Width="14" Height="15" Stretch="Uniform" Stroke="{DynamicResource MutedTextBrush}" StrokeThickness="1.35"
+                                      Data="M3,4 H13 L12,14 H4 Z M2,2 H14 M5,2 V0 H11 V2 M5,6 V12 M8,6 V12 M11,6 V12"/>
+                            </Button>
+                            <Button x:Name="PresetOverflowButton" Content="⋯" ToolTip="More preset actions"
+                                    Style="{StaticResource SidebarOverflowButtonStyle}" Click="OpenPresetOverflow">
+                                <Button.ContextMenu>
+                                    <ContextMenu Background="{StaticResource PanelBrush}"
+                                                 BorderBrush="{StaticResource BorderStrongBrush}"
+                                                 DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem Header="Clone preset" Command="{Binding DuplicateProfileCommand}"/>
+                                        <MenuItem Header="Edit preset" Click="OpenPresetEditorFromMenu"/>
+                                        <MenuItem Header="Delete preset" Command="{Binding DeleteProfileCommand}"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <Grid MaxHeight="220" ClipToBounds="True">
+                        <ListBox x:Name="PresetList" ItemsSource="{Binding Profiles}" SelectedItem="{Binding ActiveProfile, Mode=TwoWay}"
+                                 ItemTemplate="{StaticResource ProfileNavigationTemplate}" ItemContainerStyle="{StaticResource PresetItemStyle}"
+                                 Background="Transparent" BorderThickness="0" Padding="0"
+                                 ScrollViewer.ScrollChanged="PresetScrollChanged"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+            </Border>
+            </Grid>
+
+            <GridSplitter Grid.Column="1" Width="4" MinWidth="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          Background="Transparent" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"
+                          ShowsPreview="False" Cursor="SizeWE" IsTabStop="False"
+                          DragCompleted="SidebarSplitter_OnDragCompleted" Panel.ZIndex="2"/>
+
+            <Grid Grid.Column="2" Margin="0,22,28,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Choose the mod you want to play:"/>
-        </Grid>
 
-        <controls:LauncherListBoxPane x:Name="ListBoxPane" Grid.Row="1" Margin="6,0"/>
-        
-        <StackPanel Grid.Row="3" Margin="0,12,0,12">
-            <controls:PlayButton HorizontalAlignment="Center" Margin="8" Padding="8,3,8,0" Width="120" Height="40" IsDefault="True"
-                        Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBoxPane}"
-                        Text="PLAY"/>
-           
+            <controls:AcrylicBackdrop Grid.RowSpan="5" Height="150" VerticalAlignment="Top" Margin="-4,-22,-28,0"
+                                      Background="Transparent" BorderThickness="0" CornerRadius="0"
+                                      IsHitTestVisible="False" Panel.ZIndex="0"/>
+            <Border Grid.RowSpan="5" Height="150" VerticalAlignment="Top" Margin="-4,-22,-28,0"
+                    Background="{StaticResource MainHeaderGradientBrush}" IsHitTestVisible="False" Panel.ZIndex="0">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding UseGameArtwork}" Value="False">
+                                <Setter Property="Opacity" Value="0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            <controls:AcrylicBackdrop Grid.RowSpan="5" Height="150" VerticalAlignment="Bottom" Margin="-4,0,-28,-20"
+                                      Background="Transparent" BorderThickness="0" CornerRadius="0"
+                                      IsHitTestVisible="False" Panel.ZIndex="0"/>
+            <Border Grid.RowSpan="5" Height="150" VerticalAlignment="Bottom" Margin="-4,0,-28,-20"
+                    Background="{StaticResource MainFooterGradientBrush}" IsHitTestVisible="False" Panel.ZIndex="0">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding UseGameArtwork}" Value="False">
+                                <Setter Property="Opacity" Value="0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
 
-            <controls:OptionsControl DataContext="{Binding ElementName=ListBoxPane, Path=SelectedItem}" Margin="0,4,0,8"/>
-        </StackPanel>
-
-        <controls:LauncherStatusBar Grid.Row="4" >
-            <Grid>
+            <Grid Grid.Row="0" Margin="16,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel>
-                    <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Game: "/>
-                    <TextBlock VerticalAlignment="Center" 
-                               Text="{Binding Path=ForcesOfCorruption, Source={x:Static focLauncher:LauncherGameManager.Instance}, 
-                        Converter={StaticResource GameTypeToStringConverter}}"/>
-                </DockPanel>
-                <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
-                    <!--<controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">
-                        <AccessText VerticalAlignment="Center" Text="Change _Theme" TextDecorations="Underline"/>
-                    </controls:StatusBarButton>-->
-                    <controls:StatusBarButton Margin="0,0,3,0" Click="OpenSettingsWindow" Padding="5,2">
-                        <Image Source="Resources/SettingsOutline_16x.png"/>
-                    </controls:StatusBarButton>
-                    <controls:StatusBarButton Margin="0,0,3,0" Click="OpenAboutWindow" Padding="5,2">
-                        <Image Source="Resources/StatusHelp_grey_disabled_16x.png"/>
-                    </controls:StatusBarButton>
-                </DockPanel>
+                <Border Width="58" Height="58" CornerRadius="12" Background="Transparent" Padding="0" ClipToBounds="True">
+                    <Image Source="{Binding ActiveGameIcon}" Stretch="UniformToFill"/>
+                </Border>
+                <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ActiveGameName}" FontSize="25" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="{Binding ActiveGameStore}" Foreground="{StaticResource PrimaryBrush}" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="  ·  " Foreground="{StaticResource MutedTextBrush}"/>
+                        <TextBlock Text="{Binding ActiveGameStatus}" Foreground="{StaticResource MutedTextBrush}" FontSize="11"/>
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="{Binding SelectedModSummary}" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
             </Grid>
-        </controls:LauncherStatusBar>
+
+            <Grid Grid.Row="1" Margin="16,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="8" Padding="10,0">
+                    <TextBox x:Name="ModSearchBox" Style="{StaticResource SearchBoxStyle}" Height="36"
+                             IsEnabled="{Binding IsVanillaPreset, Converter={StaticResource InverseBooleanConverter}}"
+                             Text="{Binding ElementName=ListBoxPane, Path=FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Search mods by name, source, or ID"/>
+                </Border>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="↻" ToolTip="Refresh installed mods" Style="{StaticResource ToolbarButtonStyle}"
+                            Background="{StaticResource PanelTranslucentBrush}"
+                            Width="38" Height="36" Padding="0" FontSize="18" Click="RefreshInstalledMods" Margin="0,0,6,0"/>
+                    <Button Content="+" ToolTip="Add mods to this preset" Style="{StaticResource ToolbarButtonStyle}"
+                            Background="{StaticResource PanelTranslucentBrush}"
+                            Width="38" Height="36" Padding="0" FontSize="20" Click="OpenAddModsOverlay"
+                            IsEnabled="{Binding IsVanillaPreset, Converter={StaticResource InverseBooleanConverter}}"/>
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="2" Margin="16,0,0,0" Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1" CornerRadius="10" Padding="10">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top" Margin="8,2,8,10">
+                        <StackPanel>
+                            <TextBlock Text="Mod load order" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextBrush}"/>
+                            <TextBlock Text="Hold ☰ and drag to set order. Bottom-listed mods load first." FontSize="11" Foreground="{StaticResource MutedTextBrush}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid>
+                        <controls:LauncherListBoxPane x:Name="ListBoxPane" ActiveGame="{Binding ActiveGame}"
+                                                      ScrollViewer.ScrollChanged="MainListScrollChanged"
+                                                      IsEnabled="{Binding IsVanillaPreset, Converter={StaticResource InverseBooleanConverter}}">
+                            <controls:LauncherListBoxPane.Style>
+                                <Style TargetType="{x:Type controls:LauncherListBoxPane}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Opacity" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPresetEmpty}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsVanillaPreset}" Value="True">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </controls:LauncherListBoxPane.Style>
+                        </controls:LauncherListBoxPane>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="{Binding IsPresetEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsVanillaPreset}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock Text="EMPTY PRESET" Foreground="{StaticResource TextBrush}" FontSize="16"
+                                       FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="No mods have been added to this preset yet. Select Add to choose mods for this loadout."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="12" TextAlignment="Center"
+                                         TextWrapping="Wrap" Margin="0,8,0,0"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsVanillaPreset}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock Text="VANILLA PRESET" Foreground="{StaticResource TextBrush}" FontSize="16"
+                                       FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="This preset uses the game's default loadout and is read-only. Create a new preset to customize your mods."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="12" TextAlignment="Center"
+                                       TextWrapping="Wrap" Margin="0,8,0,0"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="{Binding ElementName=ListBoxPane, Path=ItemView.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPresetEmpty}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsVanillaPreset}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock Text="NO MATCHING MODS" Foreground="{StaticResource TextBrush}" FontSize="15"
+                                       FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Try a different name, source, or Workshop ID."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="12" TextAlignment="Center"
+                                       TextWrapping="Wrap" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </DockPanel>
+            </Border>
+
+            <Border Grid.Row="3" Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1" CornerRadius="8" Padding="12" Margin="16,14,0,12">
+                <DockPanel>
+                    <TextBlock Text="Launch arguments" Foreground="{StaticResource MutedTextBrush}" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding LaunchArguments}" Foreground="{StaticResource TextBrush}" FontSize="11" Margin="14,0,0,0"
+                               TextTrimming="CharacterEllipsis" ToolTip="{Binding LaunchArguments}"/>
+                </DockPanel>
+            </Border>
+
+                <Grid Grid.Row="4" Margin="16,0,0,0">
+                    <StackPanel HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Width="150" Height="44" Margin="0,0,8,0"
+                                      Style="{StaticResource OverlayComboBoxStyle}"
+                                      ItemsSource="{Binding PlayModes}"
+                                      SelectedItem="{Binding SelectedPlayMode, Mode=TwoWay}"
+                                      ToolTip="Choose whether to launch with the selected mods"/>
+                            <controls:PlayButton Width="180" Height="44" IsDefault="True"
+                                                  Command="{Binding LaunchCommand}" Text="PLAY"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding PlayModeGuidance}" Foreground="{StaticResource MutedTextBrush}"
+                                   FontSize="10" HorizontalAlignment="Right" Margin="0,6,2,0"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="OverlayHost" Background="{StaticResource OverlayBackdropBrush}" Opacity="0" Visibility="Collapsed" Panel.ZIndex="100"
+              Focusable="True" PreviewMouseDown="OverlayHost_OnPreviewMouseDown">
+            <controls:AcrylicBackdrop x:Name="AddModsOverlay" Style="{StaticResource AcrylicBackdropStyle}" Width="700" MaxHeight="620"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Background="{StaticResource OverlayTranslucentBrush}" BorderBrush="{StaticResource BorderStrongBrush}"
+                                      BorderThickness="1" CornerRadius="16" Padding="24" UseArtworkBackdrop="False"
+                                      Effect="{StaticResource OverlayShadowEffect}" Opacity="0" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5">
+                <controls:AcrylicBackdrop.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </controls:AcrylicBackdrop.RenderTransform>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" Margin="0,0,0,18" LastChildFill="False">
+                        <StackPanel>
+                            <TextBlock Text="Add mods to preset" Foreground="{StaticResource TextBrush}" FontSize="24" FontWeight="Bold"/>
+                            <TextBlock Text="Choose installed mods to include in this loadout." Foreground="{StaticResource MutedTextBrush}"
+                                       FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button DockPanel.Dock="Right" Content="✕" Width="34" Height="34" Padding="0"
+                                Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" ToolTip="Close mod picker"/>
+                    </DockPanel>
+
+                    <Grid Grid.Row="1" MinHeight="260">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="8" Padding="10,0" Margin="0,0,0,10">
+                            <TextBox Style="{StaticResource SearchBoxStyle}" Height="36"
+                                     Text="{Binding PickerFilterText, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="Search available mods by name, source, or Workshop ID"/>
+                        </Border>
+                        <Grid Grid.Row="1">
+                        <ListBox ItemsSource="{Binding AvailableModsView}" ItemContainerStyle="{StaticResource SidebarItemStyle}"
+                                 ScrollViewer.ScrollChanged="AddModsScrollChanged"
+                                 Background="Transparent" BorderThickness="0" Padding="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{DynamicResource PanelTranslucentBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                                            CornerRadius="8" Padding="10" Margin="0,3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="28"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
+                                            <controls:LauncherCheckBox Grid.Column="0" Width="20" Height="20" VerticalAlignment="Center"
+                                                                       Focusable="False" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,8,0">
+                                                <TextBlock Text="{Binding Item.Text}" Foreground="{DynamicResource TextBrush}" FontSize="13"
+                                                           FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding Item.ModSource}" Foreground="{DynamicResource MutedTextBrush}" FontSize="10" Margin="0,3,0,0"/>
+                                            </StackPanel>
+                                            <Border Grid.Column="2" Width="34" Height="34" CornerRadius="7" Background="Transparent" Padding="0"
+                                                    ClipToBounds="True" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Item.IconFile}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Item.IconFile}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Image Source="{Binding Item.IconFile, IsAsync=True}" Stretch="UniformToFill"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360"
+                                    Visibility="{Binding IsAddPickerEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="No additional mods available" Foreground="{StaticResource TextBrush}" FontSize="14"
+                                       FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="All detected mods are already included in this preset."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="11" TextAlignment="Center"
+                                       TextWrapping="Wrap" Margin="0,6,0,0"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360"
+                                    Visibility="{Binding IsPickerFilterEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="NO MATCHING MODS" Foreground="{StaticResource TextBrush}" FontSize="14"
+                                       FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Try a different name, source, or Workshop ID." Foreground="{StaticResource MutedTextBrush}"
+                                       FontSize="11" TextAlignment="Center" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                        </StackPanel>
+                        </Grid>
+                    </Grid>
+
+                    <DockPanel Grid.Row="2" Margin="0,18,0,0" LastChildFill="False">
+                        <TextBlock Text="Selected mods will be added to the end of the load order." Foreground="{StaticResource MutedTextBrush}"
+                                   FontSize="11" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Content="Cancel" Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" Width="88" Height="34"/>
+                            <Button Content="Add selected" Style="{StaticResource AccentButtonStyle}" Click="AddSelectedModsAndClose"
+                                    Width="118" Height="34" Padding="10,6"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Grid>
+            </controls:AcrylicBackdrop>
+
+            <controls:AcrylicBackdrop x:Name="PresetEditorOverlay" Style="{StaticResource AcrylicBackdropStyle}" Width="700" MaxHeight="640"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Background="{StaticResource OverlayTranslucentBrush}" BorderBrush="{StaticResource BorderStrongBrush}"
+                                      BorderThickness="1" CornerRadius="16" Padding="24" UseArtworkBackdrop="False"
+                                      Effect="{StaticResource OverlayShadowEffect}" Opacity="0" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5">
+                <controls:AcrylicBackdrop.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </controls:AcrylicBackdrop.RenderTransform>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,20" LastChildFill="False">
+                        <StackPanel>
+                            <TextBlock x:Name="PresetEditorTitle" Text="New preset" Foreground="{StaticResource TextBrush}"
+                                       FontSize="24" FontWeight="Bold"/>
+               <TextBlock Text="Set a name, optional artwork, and optional subtheme for this preset."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button DockPanel.Dock="Right" Content="✕" Width="34" Height="34" Padding="0"
+                                Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" ToolTip="Close preset editor"/>
+                    </DockPanel>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="220"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,24,0">
+                            <TextBlock Text="Preset name" Foreground="{StaticResource TextBrush}" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBox x:Name="PresetEditorNameBox" Height="38" Margin="0,8,0,22"
+                                     Style="{StaticResource SearchBoxStyle}" Background="{StaticResource PanelTranslucentBrush}"
+                                     BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="10,0"
+                                     VerticalContentAlignment="Center"/>
+                            <TextBlock Text="Preset subtheme" Foreground="{StaticResource TextBrush}" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="Optional. Use current theme to inherit launcher appearance."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            <ComboBox x:Name="PresetEditorSubThemeBox" Style="{StaticResource OverlayComboBoxStyle}"
+                                      ItemsSource="{Binding PresetSubThemeNames}" Height="38" Margin="0,8,0,18"/>
+                            <TextBlock Text="Artwork rotation interval" Foreground="{StaticResource TextBrush}" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="Seconds between images. Default: 10 seconds."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            <DockPanel Margin="0,8,0,18" LastChildFill="False">
+                                <TextBox x:Name="PresetArtworkIntervalBox" Width="82" Height="34"
+                                         Style="{StaticResource SearchBoxStyle}" Background="{StaticResource PanelTranslucentBrush}"
+                                         BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="10,0"
+                                         VerticalContentAlignment="Center"/>
+                                <TextBlock Text="seconds" Foreground="{StaticResource MutedTextBrush}" FontSize="11"
+                                           VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </DockPanel>
+                            <TextBlock Text="Optional custom artwork" Foreground="{StaticResource TextBrush}" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="Use landscape or portrait artwork. Square images are not supported."
+                                       Foreground="{StaticResource MutedTextBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="PresetArtworkValidation" Foreground="{StaticResource PrimaryBrush}" FontSize="11"
+                                       TextWrapping="Wrap" Margin="0,12,0,0" Visibility="Collapsed"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Border Width="220" Height="132" CornerRadius="10" ClipToBounds="True"
+                                    Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                                <Grid>
+                                    <Image x:Name="PresetArtworkPreview" Stretch="UniformToFill"/>
+                                    <TextBlock x:Name="PresetArtworkEmptyText" Text="No custom artwork" Foreground="{StaticResource MutedTextBrush}"
+                                               FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                            </Border>
+                            <ScrollViewer Height="54" Margin="0,10,0,0" HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Disabled">
+                                <WrapPanel x:Name="PresetArtworkThumbnailPanel" Orientation="Horizontal"/>
+                            </ScrollViewer>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
+                                <Button Content="Choose images" Style="{StaticResource ToolbarButtonStyle}" Width="118" Height="34"
+                                        Click="ChoosePresetArtwork"/>
+                                <Button x:Name="PresetArtworkClearButton" Content="Clear" Style="{StaticResource ToolbarButtonStyle}"
+                                        Width="70" Height="34" Margin="8,0,0,0" Click="ClearPresetArtwork" IsEnabled="False"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <DockPanel Grid.Row="2" Margin="0,22,0,0" LastChildFill="False">
+                        <TextBlock Text="Changes save when you click Save preset." Foreground="{StaticResource MutedTextBrush}"
+                                   FontSize="11" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Content="Cancel" Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" Width="88" Height="34"/>
+                            <Button Content="Save preset" Style="{StaticResource AccentButtonStyle}" Click="SavePresetEditor"
+                                    Width="112" Height="34" Margin="8,0,0,0" Padding="10,6"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Grid>
+            </controls:AcrylicBackdrop>
+
+            <controls:AcrylicBackdrop x:Name="SettingsOverlay" Style="{StaticResource AcrylicBackdropStyle}" Width="720" MaxHeight="650"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Background="{StaticResource OverlayTranslucentBrush}" BorderBrush="{StaticResource BorderStrongBrush}"
+                                      BorderThickness="1" CornerRadius="16" Padding="24" UseArtworkBackdrop="False"
+                                      Effect="{StaticResource OverlayShadowEffect}" Opacity="0" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5">
+                <controls:AcrylicBackdrop.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </controls:AcrylicBackdrop.RenderTransform>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,18" LastChildFill="False">
+                        <StackPanel>
+                            <TextBlock Text="Settings" Foreground="{StaticResource TextBrush}" FontSize="24" FontWeight="Bold"/>
+                            <TextBlock Text="Control launch behavior, language, and launcher updates." Foreground="{StaticResource MutedTextBrush}" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button DockPanel.Dock="Right" Content="✕" Width="34" Height="34" Padding="0"
+                                Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" ToolTip="Close settings"/>
+                    </DockPanel>
+
+                    <Grid Grid.Row="1" ClipToBounds="True">
+                    <ScrollViewer ScrollChanged="SettingsScrollChanged" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel>
+                            <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Launch behavior" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold"/>
+                                    <TextBlock Text="These options apply to the next game launch." Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,3,0,12"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:LauncherCheckBox Grid.Column="0" Content="Use debug build" Foreground="{StaticResource TextBrush}"
+                                                                   Visibility="{Binding Converter={StaticResource DebugBuildToVisibilityConverter}}"
+                                                                   IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <controls:LauncherCheckBox Grid.Column="1" Content="Windowed" Foreground="{StaticResource TextBrush}"
+                                                                   IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=Windowed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </StackPanel>
+                             </Border>
+
+                            <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Appearance" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Choose a theme and color style. System follows your Windows app theme."
+                                               Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,3,0,12" TextWrapping="Wrap"/>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Theme" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                        <ComboBox Grid.Column="1" Style="{StaticResource OverlayComboBoxStyle}"
+                                                  ItemsSource="{Binding ThemeNames}"
+                                                  SelectedItem="{Binding SelectedThemeName, Mode=TwoWay}"/>
+                                        <TextBlock Grid.Row="1" Text="Subtheme" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" Margin="0,10,12,0"/>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" Style="{StaticResource OverlayComboBoxStyle}"
+                                                  ItemsSource="{Binding SubThemeNames}"
+                                                  SelectedItem="{Binding SelectedSubThemeName, Mode=TwoWay}" Margin="0,10,0,0"/>
+                                    </Grid>
+                                    <controls:LauncherCheckBox Content="Use game artwork background" Foreground="{StaticResource TextBrush}"
+                                                               IsChecked="{Binding UseGameArtwork, Mode=TwoWay}" Margin="0,12,0,0"/>
+                                    <controls:LauncherCheckBox Content="Remember selected theme" Foreground="{StaticResource TextBrush}"
+                                                               IsChecked="{Binding SaveDefaultTheme, Mode=TwoWay}" Margin="0,12,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Language" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Choose the language passed to the game." Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,3,0,12"/>
+                                    <controls:LauncherRadioButton x:Name="OverlaySystemLanguage" Content="Use system language" Foreground="{StaticResource TextBrush}"
+                                                                  GroupName="OverlayLanguageGroup" Margin="0,0,0,8"
+                                                                  IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseSystemLanguage, Mode=TwoWay}"/>
+                                    <controls:LauncherCheckBox Content="Fallback to English when unavailable" Foreground="{StaticResource TextBrush}" Margin="24,0,0,10"
+                                                               IsEnabled="{Binding ElementName=OverlaySystemLanguage, Path=IsChecked}"
+                                                               IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=FallbackToEnglish, Mode=TwoWay}"/>
+                                    <controls:LauncherRadioButton x:Name="OverlayCustomLanguage" Content="Use custom language" Foreground="{StaticResource TextBrush}"
+                                                                  GroupName="OverlayLanguageGroup" Margin="0,0,0,8"
+                                                                  IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseSystemLanguage, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}"/>
+                                    <controls:WatermarkedTextBox Margin="24,0,0,0" Height="34" Watermark="Enter English language name..."
+                                                                 IsEnabled="{Binding ElementName=OverlayCustomLanguage, Path=IsChecked}"
+                                                                 Foreground="{StaticResource TextBrush}"
+                                                                 Text="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=CustomLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Advanced" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Optional engine flags for troubleshooting and compatibility." Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,3,0,12"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <controls:LauncherCheckBox Grid.Column="0" Content="Ignore asserts" Foreground="{StaticResource TextBrush}"
+                                                                   IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=IgnoreAsserts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <controls:LauncherCheckBox Grid.Column="1" Content="Disable art processing" Foreground="{StaticResource TextBrush}"
+                                                                   IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=NoArtProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16">
+                                <StackPanel>
+                                    <TextBlock Text="Launcher updates" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Choose how the launcher checks for new versions." Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,3,0,12"/>
+                                    <controls:LauncherCheckBox Content="Search for launcher updates on startup" Foreground="{StaticResource TextBrush}"
+                                                               IsChecked="{Binding Launcher.AutoUpdateEnabled, Mode=TwoWay}" Margin="0,0,0,8"/>
+                                    <controls:LauncherCheckBox x:Name="UseBetaBuildsCheckBox" Content="Use beta builds" Foreground="{StaticResource TextBrush}"
+                                                               IsChecked="{Binding UseBetaBuilds, Mode=TwoWay}" Margin="0,0,0,10"/>
+                                    <Grid IsEnabled="{Binding ElementName=UseBetaBuildsCheckBox, Path=IsChecked}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="If no beta is available" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" Margin="24,0,12,0"/>
+                                        <ComboBox Grid.Column="1" Style="{StaticResource OverlayComboBoxStyle}" ItemsSource="{Binding ExampleEnumsWithCaptions}"
+                                                  DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding UpdateFallbackOption, Mode=TwoWay}"/>
+                                    </Grid>
+                                    <Grid Margin="0,14,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Language fallback" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" Margin="24,0,12,0"/>
+                                        <ComboBox Grid.Column="1" Style="{StaticResource OverlayComboBoxStyle}" ItemsSource="{Binding LanguageFallbackItems}"
+                                                  SelectedValuePath="Option" SelectedValue="{Binding LanguageFallbackOption, Mode=TwoWay}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding DisplayName}" Foreground="{StaticResource TextBrush}" ToolTip="{Binding Tooltip}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                    </Grid>
+
+                    <DockPanel Grid.Row="2" Margin="0,18,0,0" LastChildFill="False">
+                        <TextBlock Text="Changes save automatically." Foreground="{StaticResource MutedTextBrush}" FontSize="11" VerticalAlignment="Center"/>
+                        <Button DockPanel.Dock="Right" Content="Done" Style="{StaticResource AccentButtonStyle}" Click="CloseOverlay"
+                                Width="88" Height="34" Padding="14,6"/>
+                    </DockPanel>
+                </Grid>
+            </controls:AcrylicBackdrop>
+
+            <controls:AcrylicBackdrop x:Name="AboutOverlay" Style="{StaticResource AcrylicBackdropStyle}" Width="600" MaxHeight="520"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Background="{StaticResource OverlayTranslucentBrush}" BorderBrush="{StaticResource BorderStrongBrush}"
+                                      BorderThickness="1" CornerRadius="16" Padding="24" UseArtworkBackdrop="False"
+                                      Effect="{StaticResource OverlayShadowEffect}" Opacity="0" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5">
+                <controls:AcrylicBackdrop.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </controls:AcrylicBackdrop.RenderTransform>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" Margin="0,0,0,22" LastChildFill="False">
+                        <StackPanel>
+                            <TextBlock Text="About EMPIRE AT WAR Launcher" Foreground="{StaticResource TextBrush}" FontSize="24" FontWeight="Bold"/>
+                            <TextBlock Text="A cleaner way to organize and launch EaW and FoC mods." Foreground="{StaticResource MutedTextBrush}" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button DockPanel.Dock="Right" Content="✕" Width="34" Height="34" Padding="0"
+                                Style="{StaticResource ToolbarButtonStyle}" Click="CloseOverlay" ToolTip="Close about"/>
+                    </DockPanel>
+
+                    <StackPanel Grid.Row="1">
+                        <Border Background="{StaticResource PanelTranslucentBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="72"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="56" Height="56" CornerRadius="12" Background="{StaticResource SelectedBrush}" Padding="8">
+                                    <Image Source="{Binding ActiveGameIcon}" Stretch="Uniform"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="EMPIRE AT WAR Launcher" Foreground="{StaticResource TextBrush}" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Heavily modified and maintained by FuriosGuy" Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Based on the original launcher by AnakinSklavenwalker" Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <TextBlock Text="Credits and licensing" Foreground="{StaticResource TextBrush}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,8"/>
+                        <StackPanel TextElement.Foreground="{StaticResource MutedTextBrush}" TextElement.FontSize="11">
+                            <TextBlock Text="Splash screen image © Exhumed"/>
+                            <TextBlock Text="Palpatine, Anakin, Han, Cody image © Lucasfilm Ltd. LLC" Margin="0,4,0,0"/>
+                            <TextBlock Text="Vader image © Marvel Comics" Margin="0,4,0,0"/>
+                        <TextBlock Text="Empire at War font © Petroglyph/LucasArts" Margin="0,4,0,0"/>
+                            <TextBlock Margin="0,8,0,0">
+                                <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-nd/4.0/" RequestNavigate="OpenLicenseSite"
+                                           TextElement.Foreground="{StaticResource PrimaryBrush}">License information</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Margin="0,6,0,0">
+                                <Hyperlink NavigateUri="https://github.com/FuriosGuy/EAW-Launcher" RequestNavigate="OpenRepositorySite"
+                                           TextElement.Foreground="{StaticResource PrimaryBrush}">Project repository</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <DockPanel Grid.Row="2" Margin="0,22,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Launcher version" Foreground="{StaticResource MutedTextBrush}" FontSize="10"/>
+                            <TextBlock Text="{Binding LauncherVersion}" Foreground="{StaticResource TextBrush}" FontSize="12"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right">
+                            <TextBlock Text="Theme version" Foreground="{StaticResource MutedTextBrush}" FontSize="10" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding ThemeVersion}" Foreground="{StaticResource TextBrush}" FontSize="12" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Grid>
+            </controls:AcrylicBackdrop>
+        </Grid>
+
+        <Canvas x:Name="DragPreviewLayer" Visibility="Collapsed" IsHitTestVisible="False" Panel.ZIndex="500">
+            <Border x:Name="DragPreview" Width="0" Height="0" Background="Transparent" BorderBrush="{StaticResource DropIndicatorBrush}"
+                    BorderThickness="1" CornerRadius="8" Opacity="0" RenderTransformOrigin="0.5,0.5"
+                    Effect="{StaticResource OverlayShadowEffect}">
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="0.96" ScaleY="0.96"/>
+                </Border.RenderTransform>
+            </Border>
+        </Canvas>
     </Grid>
 </baseControls:ShadowChromeWindow>

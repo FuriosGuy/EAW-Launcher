@@ -13,7 +13,10 @@ namespace FocLauncherHost
 {
     public static class Program
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+        private static readonly string LegacyApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+        private static readonly string ApplicationBasePath = Directory.Exists(LegacyApplicationBasePath)
+            ? LegacyApplicationBasePath
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EMPIRE AT WAR Launcher");
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -40,7 +43,7 @@ namespace FocLauncherHost
                 NLogUtils.DeleteOldLogFile();
             NLogUtils.SetLoggingForAppDomain();
 
-            Logger.Debug($"Started FoC Launcher with arguments: {lastResult}");
+            Logger.Debug($"Started EMPIRE AT WAR Launcher with arguments: {lastResult}");
 
             var update = LauncherInitializer.Initialize(lastResult);
 #if !DEBUG
@@ -127,7 +130,7 @@ namespace FocLauncherHost
         {
             var s = new AppDomainSetup
             {
-                ApplicationName = "FoC Launcher",
+                ApplicationName = "EMPIRE AT WAR Launcher",
                 ApplicationBase = LauncherConstants.ApplicationBasePath,
                 //LoaderOptimization = LoaderOptimization.MultiDomainHost
             };

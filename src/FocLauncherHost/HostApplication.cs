@@ -57,8 +57,7 @@ namespace FocLauncherHost
                     UpdateInformation? updateInformation = null;
                     try
                     {
-                        var updateManager = new FocLauncherUpdaterManager(LauncherConstants.UpdateMetadataPath);
-                        updateInformation = await updateManager.CheckAndPerformUpdateAsync(cts.Token);
+                        updateInformation = await CheckForUpdateAsync(cts.Token);
                         Logger.Info($"Finished automatic update with result {updateInformation}");
                     }
                     catch (OperationCanceledException)
@@ -82,6 +81,22 @@ namespace FocLauncherHost
             {
                 _canCloseApplicationEvent.Set();
             }
+        }
+
+        private static async Task<UpdateInformation> CheckForUpdateAsync(CancellationToken token)
+        {
+            var updateManager = new FocLauncherUpdaterManager(LauncherConstants.UpdateMetadataPath);
+            var updateInformation = await updateManager.CheckAndPerformUpdateAsync(token);
+
+            if (updateInformation.Result == UpdateResult.Failed
+                && updateInformation.Message?.IndexOf("update metadata", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                Logger.Warn($"The current update feed was unavailable. Falling back to the legacy feed: {updateInformation.Message}");
+                updateManager = new FocLauncherUpdaterManager(LauncherConstants.LegacyUpdateMetadataPath);
+                updateInformation = await updateManager.CheckAndPerformUpdateAsync(token);
+            }
+
+            return updateInformation;
         }
         
         private async Task SetWhenWaitDialogIsShownAsync(TimeSpan delay, CancellationToken token)

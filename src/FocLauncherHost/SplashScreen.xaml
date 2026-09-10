@@ -35,7 +35,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <controls:OutlinedTextBlock Text="FoC Launcher" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"
+        <controls:OutlinedTextBlock Text="EMPIRE AT WAR Launcher" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"
                                     Stroke="White" StrokePosition="Outside" StrokeThickness="1.5" FontWeight="Bold"/>
         <controls:OutlinedTextBlock x:Name="PreviewTextBlock" Grid.Row="1" 
                                     Text="{Binding Launcher.UpdateSearchOption, Converter={StaticResource LauncherTypeNameConverter}}"

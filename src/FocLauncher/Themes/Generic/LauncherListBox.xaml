@@ -27,10 +27,10 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="IsTabStop" Value="True"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBackground}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBorder}}"/>
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
         <Setter Property="Template" Value="{StaticResource ListBoxTemplate}"/>
     </Style>
     

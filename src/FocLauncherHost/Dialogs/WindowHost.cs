@@ -15,7 +15,7 @@ namespace FocLauncherHost.Dialogs
         {
             HostWindow = new Window
             {
-                Title = "FoC Launcher",
+                Title = "EMPIRE AT WAR Launcher",
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
             };

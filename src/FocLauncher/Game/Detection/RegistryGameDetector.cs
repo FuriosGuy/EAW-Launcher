@@ -40,7 +40,7 @@ namespace FocLauncher.Game.Detection
                 if (RunSteamInitialization())
                 {
                     Logger.Trace("After initialization, the games are now setted up.");
-                    Task.Run(() => MessageBox.Show("Setting up the game was successful!", "FoC Launcher",
+                    Task.Run(() => MessageBox.Show("Setting up the game was successful!", "EMPIRE AT WAR Launcher",
                         MessageBoxButton.OK, MessageBoxImage.Information)).Forget();
                     return new GameDetection(new FileInfo(EaWRegistryHelper.Instance.ExePath),
                         new FileInfo(FocRegistryHelper.Instance.ExePath));
@@ -98,7 +98,7 @@ namespace FocLauncher.Game.Detection
         
         internal static bool PromptGameSetupDialog()
         {
-            var mbResult = MessageBox.Show(SetupMessage, "FoC Launcher", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
+            var mbResult = MessageBox.Show(SetupMessage, "EMPIRE AT WAR Launcher", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
             return mbResult == MessageBoxResult.Yes;
         }
     }

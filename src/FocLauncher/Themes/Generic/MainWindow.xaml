@@ -12,57 +12,87 @@
         <Setter Property="theming:ScrollBarThemingUtilities.ThemeScrollBars" Value="True"/>
         <Setter Property="InputMethod.IsInputMethodSuspended" Value="True" />
         <Setter Property="FlowDirection" Value="LeftToRight" />
-        <Setter Property="HasMaximizeButton" Value="False" />
+        <Setter Property="HasMaximizeButton" Value="True" />
         <Setter Property="HasMinimizeButton" Value="True" />
         <Setter Property="MinWidth" Value="200" />
         <Setter Property="MinHeight" Value="200" />
         <Setter Property="Title" Value="{Binding Path=Caption}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static core:EnvironmentColors.BackgroundImage}}" />
+        <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
-        <Setter Property="ActiveGlowColor" Value="{DynamicResource {x:Static core:EnvironmentColors.MainWindowActiveShadowAndBorderColor}}" />
-        <Setter Property="InactiveGlowColor" Value="{DynamicResource {x:Static core:EnvironmentColors.MainWindowInactiveShadowAndBorderColor}}" />
-        <Setter Property="NonClientFillColor" Value="{DynamicResource {x:Static core:EnvironmentColors.BackgroundColor}}" />
-        <Setter Property="ResizeMode" Value="CanMinimize"/>
+        <Setter Property="ActiveGlowColor" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="InactiveGlowColor" Value="{DynamicResource DisabledColor}" />
+        <Setter Property="NonClientFillColor" Value="{DynamicResource SidebarColor}" />
+        <Setter Property="ResizeMode" Value="CanResize"/>
         <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type window:MainWindow}">
+                    <Border x:Name="WindowFrame" Background="{TemplateBinding Background}"
+                            CornerRadius="16" ClipToBounds="True">
                     <Grid x:Name="MainGrid" Background="{TemplateBinding Background}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
+                        <Image x:Name="ArtworkImage" Grid.RowSpan="2" Source="{Binding ActiveGameBackgroundImage}" Stretch="UniformToFill"
+                               IsHitTestVisible="False">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Opacity" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UseGameArtwork}" Value="True">
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                         <baseControls:MainWindowTitleBar x:Name="MainWindowTitleBar" Grid.Row="0" Height="32" 
-                                                         Background="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarBackground}}"
-                                                         TextElement.Foreground="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarForeground}}">
+                                                         Background="Transparent"
+                                                         TextElement.Foreground="{DynamicResource TitleBarTextBrush}">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="AppIcon"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Buttons"/>
-                                </Grid.ColumnDefinitions>
-                                <baseControls:SystemMenu x:Name="SystemMenu" Width="32" Height="27" Margin="0,0,12,4" Padding="12,7,0,0" 
-                                                         VerticalAlignment="Top" Source="{TemplateBinding Icon}">
-                                </baseControls:SystemMenu>
-                                <TextBlock Text="{TemplateBinding Window.Title}"
-                                           TextTrimming="CharacterEllipsis"
-                                           FontFamily="{DynamicResource {x:Static focLauncher:LauncherFonts.EaWBoldFontFamilyKey}}"
-                                           FontSize="18"
-                                           VerticalAlignment="Center" Margin="0,7,0,4" Grid.Column="1">
-                                </TextBlock>
-                                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                               <Image x:Name="TitleBarArtworkImage" Source="{Binding ActiveGameBackgroundImage}" Stretch="UniformToFill" Opacity="0.96"
+                                       Effect="{DynamicResource AcrylicBlurEffect}" IsHitTestVisible="False">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding UseGameArtwork}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <Border Background="{DynamicResource TitleBarTranslucentBrush}" IsHitTestVisible="False"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AppIcon"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Buttons"/>
+                                    </Grid.ColumnDefinitions>
+                                    <baseControls:SystemMenu x:Name="SystemMenu" Width="32" Height="27" Margin="0,0,12,4" Padding="12,7,0,0"
+                                                             VerticalAlignment="Top" Source="{TemplateBinding Icon}">
+                                    </baseControls:SystemMenu>
+                                    <TextBlock Text="{TemplateBinding Window.Title}"
+                                               TextTrimming="CharacterEllipsis"
+                                                FontFamily="Segoe UI"
+                                                FontSize="13" FontWeight="SemiBold"
+                                               VerticalAlignment="Center" Margin="0,7,0,4" Grid.Column="1">
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="2">
                                     <baseControls:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"
                                                                        Command="{x:Static baseControls:WindowCommands.MinimizeWindow}"
                                                                        BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
                                                                        PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
-                                                                       GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
-                                                                       HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
-                                                                       HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
-                                                                       HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
-                                                                       PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
-                                                                       PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
-                                                                       PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
+                                                                       GlyphForeground="{DynamicResource WindowGlyphBrush}"
+                                                                       HoverBackground="{DynamicResource HoverBrush}"
+                                                                       HoverBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       HoverForeground="{DynamicResource TextBrush}"
+                                                                       PressedBackground="{DynamicResource PrimaryPressedBrush}"
+                                                                       PressedBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       PressedForeground="{DynamicResource SelectionTextBrush}">
                                         <ButtonBase.CommandParameter>
                                             <Binding RelativeSource="{RelativeSource TemplatedParent}"/>
                                         </ButtonBase.CommandParameter>
@@ -73,17 +103,49 @@
                                             </Shape.Fill>
                                         </Path>
                                     </baseControls:WindowTitleBarButton>
+                                    <baseControls:WindowTitleBarButton x:Name="MaximizeButton" VerticalAlignment="Top"
+                                                                       Command="{x:Static baseControls:WindowCommands.ToggleMaximizeWindow}"
+                                                                       BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
+                                                                       PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
+                                                                       GlyphForeground="{DynamicResource WindowGlyphBrush}"
+                                                                       HoverBackground="{DynamicResource HoverBrush}"
+                                                                       HoverBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       HoverForeground="{DynamicResource TextBrush}"
+                                                                       PressedBackground="{DynamicResource PrimaryPressedBrush}"
+                                                                       PressedBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       PressedForeground="{DynamicResource SelectionTextBrush}"
+                                                                       ToolTip="Maximize or restore">
+                                        <ButtonBase.CommandParameter>
+                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"/>
+                                        </ButtonBase.CommandParameter>
+                                        <Grid Width="16" Height="16">
+                                            <Path x:Name="MaximizeButtonPath" Width="12" Height="10" Stretch="None"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M 2,2 L 14,2 L 14,13 L 2,13 Z M 3,3 L 3,12 L 13,12 L 13,3 Z">
+                                                <Shape.Fill>
+                                                    <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
+                                                </Shape.Fill>
+                                            </Path>
+                                            <Path x:Name="RestoreButtonPath" Width="14" Height="13" Stretch="None"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"
+                                                  Data="M 5,2 L 14,2 L 14,11 L 12,11 L 12,4 L 5,4 Z M 2,5 L 11,5 L 11,14 L 2,14 Z M 3,6 L 3,13 L 10,13 L 10,6 Z">
+                                                <Shape.Fill>
+                                                    <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
+                                                </Shape.Fill>
+                                            </Path>
+                                        </Grid>
+                                    </baseControls:WindowTitleBarButton>
                                     <baseControls:WindowTitleBarButton x:Name="CloseButton" VerticalAlignment="Top"
                                                                        Command="{x:Static baseControls:WindowCommands.CloseWindow}"
                                                                        BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
                                                                        PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
-                                                                       GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
-                                                                       HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
-                                                                       HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
-                                                                       HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
-                                                                       PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
-                                                                       PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
-                                                                       PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
+                                                                       GlyphForeground="{DynamicResource WindowGlyphBrush}"
+                                                                       HoverBackground="{DynamicResource HoverBrush}"
+                                                                       HoverBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       HoverForeground="{DynamicResource TextBrush}"
+                                                                       PressedBackground="{DynamicResource PrimaryPressedBrush}"
+                                                                       PressedBorderBrush="{DynamicResource PrimaryBrush}"
+                                                                       PressedForeground="{DynamicResource SelectionTextBrush}">
                                         <ButtonBase.CommandParameter>
                                             <Binding>
                                                 <Binding.RelativeSource>
@@ -98,49 +160,71 @@
                                             </Shape.Fill>
                                         </Path>
                                     </baseControls:WindowTitleBarButton>
-                                </StackPanel>
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
                         </baseControls:MainWindowTitleBar>
                         <AdornerDecorator Grid.Row="1">
                             <ContentPresenter/>
                         </AdornerDecorator>
                     </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Window.IsActive" Value="false">
                             <Setter TargetName="MainWindowTitleBar"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarForegroundInactive}}"
+                                    Value="{DynamicResource WindowInactiveTextBrush}"
                                     Property="TextElement.Foreground"/>
                             <Setter TargetName="MinimizeButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveBorder}}"
+                                    Value="{DynamicResource WindowInactiveBrush}"
                                     Property="Border.BorderBrush"/>
                             <Setter TargetName="MinimizeButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveForeground}}"
+                                    Value="{DynamicResource WindowInactiveTextBrush}"
                                     Property="baseControls:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="MinimizeButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBackground}}"
+                                    Value="{DynamicResource WindowInactiveBrush}"
                                     Property="baseControls:GlyphButton.HoverBackground"/>
                             <Setter TargetName="MinimizeButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBorder}}"
+                                    Value="{DynamicResource BorderStrongBrush}"
                                     Property="baseControls:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="MinimizeButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverForeground}}"
+                                    Value="{DynamicResource TextSecondaryBrush}"
+                                    Property="baseControls:GlyphButton.HoverForeground"/>
+                            <Setter TargetName="MaximizeButton"
+                                    Value="{DynamicResource WindowInactiveBrush}"
+                                    Property="Border.BorderBrush"/>
+                            <Setter TargetName="MaximizeButton"
+                                    Value="{DynamicResource WindowInactiveTextBrush}"
+                                    Property="baseControls:GlyphButton.GlyphForeground"/>
+                            <Setter TargetName="MaximizeButton"
+                                    Value="{DynamicResource WindowInactiveBrush}"
+                                    Property="baseControls:GlyphButton.HoverBackground"/>
+                            <Setter TargetName="MaximizeButton"
+                                    Value="{DynamicResource BorderStrongBrush}"
+                                    Property="baseControls:GlyphButton.HoverBorderBrush"/>
+                            <Setter TargetName="MaximizeButton"
+                                    Value="{DynamicResource TextSecondaryBrush}"
                                     Property="baseControls:GlyphButton.HoverForeground"/>
                             <Setter TargetName="CloseButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveBorder}}"
+                                    Value="{DynamicResource WindowInactiveBrush}"
                                     Property="Border.BorderBrush"/>
                             <Setter TargetName="CloseButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveForeground}}"
+                                    Value="{DynamicResource WindowInactiveTextBrush}"
                                     Property="baseControls:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="CloseButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBackground}}"
+                                    Value="{DynamicResource WindowInactiveBrush}"
                                     Property="baseControls:GlyphButton.HoverBackground"/>
                             <Setter TargetName="CloseButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBorder}}"
+                                    Value="{DynamicResource BorderStrongBrush}"
                                     Property="baseControls:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="CloseButton"
-                                    Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverForeground}}"
+                                    Value="{DynamicResource TextSecondaryBrush}"
                                     Property="baseControls:GlyphButton.HoverForeground"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource TemplatedParent}}" Value="Maximized">
+                            <Setter TargetName="WindowFrame" Property="CornerRadius" Value="0"/>
+                            <Setter TargetName="MaximizeButtonPath" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="RestoreButtonPath" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

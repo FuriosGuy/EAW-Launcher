@@ -212,7 +212,8 @@ namespace FocLauncherHost
                 throw new NotSupportedException("No products to update are found");
 
             var productsWithCorrectName = catalogs.Products.Where(x =>
-                    x.Name.Equals(LauncherInformation.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    x.Name.Equals(LauncherInformation.Name, StringComparison.InvariantCultureIgnoreCase)
+                    || x.Name.Equals(LauncherConstants.OriginalProductName, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             var searchOption = LauncherInformation.CurrentUpdateSearchOption ?? LauncherInformation.UpdateSearchOption;
 
@@ -225,7 +226,7 @@ namespace FocLauncherHost
             {
                 var messageBoxResult = MessageBox.Show(
                     $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
-                    "FoC Launcher", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+                    "EMPIRE AT WAR Launcher", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
                 useFallback = messageBoxResult == MessageBoxResult.Yes;
             }
             return useFallback ? fallbackAction(productsWithCorrectName) : null;

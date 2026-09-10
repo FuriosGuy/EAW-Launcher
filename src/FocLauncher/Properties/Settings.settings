@@ -8,11 +8,26 @@
     <Setting Name="SaveDefaultTheme" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="UseGameArtwork" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="DefaultTheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultSubTheme" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LanguageFallback" Type="FocLauncher.Settings.LanguageFallback" Scope="User">
       <Value Profile="(Default)">NoText</Value>
+    </Setting>
+    <Setting Name="WindowWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">980</Value>
+    </Setting>
+    <Setting Name="WindowHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">720</Value>
+    </Setting>
+    <Setting Name="SidebarWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">224</Value>
     </Setting>
   </Settings>
 </SettingsFile>

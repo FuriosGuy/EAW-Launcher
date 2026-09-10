@@ -4,7 +4,9 @@
                     xmlns:themes="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
 
     <Style TargetType="{x:Type controls:LauncherCheckBox}">
-        <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxText}}"/>
+        <Setter Property="Control.Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:LauncherCheckBox}">
@@ -14,12 +16,15 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid SnapsToDevicePixels="True" Width="16" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <Border x:Name="CheckMarkBorder" BorderThickness="1"
-                                    Background="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBackground}}"
-                                    BorderBrush="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBorder}}"/>
+                    <Border x:Name="CheckMarkBorder" BorderThickness="1" CornerRadius="4"
+                                    Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderStrongBrush}"/>
                             <Path x:Name="CheckGlyph" Stretch="Uniform" Margin="3,1,2,2" Visibility="Collapsed" Width="9" Height="8"
-                                  Fill="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxGlyph}}"
-                                  Data="M 6.22,11.02 C 6.22,11.02 2.5,7.24 2.5,7.24 2.5,7.24 4.05,5.71 4.05,5.71 4.05,5.71 5.97,7.65 5.97,7.65 5.97,7.65 10.52,1.38 10.52,1.38 10.52,1.38 13.19,1.38 13.19,1.38 13.19,1.38 6.22,11.02 6.22,11.02 6.22,11.02 6.22,11.02 6.22,11.02 Z"/>
+                                  Fill="{DynamicResource CheckGlyphBrush}" RenderTransformOrigin="0.5,0.5" Opacity="0"
+                                  Data="M 6.22,11.02 C 6.22,11.02 2.5,7.24 2.5,7.24 2.5,7.24 4.05,5.71 4.05,5.71 4.05,5.71 5.97,7.65 5.97,7.65 5.97,7.65 10.52,1.38 10.52,1.38 10.52,1.38 13.19,1.38 13.19,1.38 13.19,1.38 6.22,11.02 6.22,11.02 6.22,11.02 6.22,11.02 6.22,11.02 Z">
+                                <Path.RenderTransform>
+                                    <ScaleTransform x:Name="CheckScale" ScaleX="0.65" ScaleY="0.65"/>
+                                </Path.RenderTransform>
+                            </Path>
                         </Grid>
                         <ContentPresenter x:Name="CheckBoxContent" Grid.Column="1" Focusable="False"
                                           Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
@@ -31,24 +36,53 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckGlyph" Property="Visibility" Value="Visible"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Opacity"
+                                                         To="1" Duration="0:0:0.14"/>
+                                        <DoubleAnimation Storyboard.TargetName="CheckScale" Storyboard.TargetProperty="ScaleX"
+                                                         To="1" Duration="0:0:0.14"/>
+                                        <DoubleAnimation Storyboard.TargetName="CheckScale" Storyboard.TargetProperty="ScaleY"
+                                                         To="1" Duration="0:0:0.14"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="CheckGlyph" Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.10"/>
+                                        <DoubleAnimation Storyboard.TargetName="CheckScale" Storyboard.TargetProperty="ScaleX"
+                                                         To="0.65" Duration="0:0:0.10"/>
+                                        <DoubleAnimation Storyboard.TargetName="CheckScale" Storyboard.TargetProperty="ScaleY"
+                                                         To="0.65" Duration="0:0:0.10"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBackgroundDisabled}}"/>
-                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBorderDisabled}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxTextDisabled}}"/>
-                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxGlyphDisabled}}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource AppBackgroundBrush}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledTextBrush}"/>
+                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource DisabledTextBrush}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBackgroundHover}}"/>
-                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBorderHover}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxTextHover}}"/>
-                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxGlyphHover}}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource HoverBrush}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource TextBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBackgroundDown}}"/>
-                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxBorderDown}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxTextDown}}"/>
-                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource {x:Static themes:EnvironmentColors.CheckBoxGlyphDown}}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource PrimaryPressedBrush}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource SelectionTextBrush}"/>
+                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource CheckGlyphBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMarkBorder" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            <Setter TargetName="CheckMarkBorder" Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
+                            <Setter TargetName="CheckGlyph" Property="Fill" Value="{DynamicResource CheckGlyphBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

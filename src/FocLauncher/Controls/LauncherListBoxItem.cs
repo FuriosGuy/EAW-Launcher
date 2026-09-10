@@ -14,7 +14,37 @@ namespace FocLauncher.Controls
         public static readonly RoutedEvent InvokedEvent;
         public static readonly RoutedEvent InvokeFailedEvent;
 
+        public static readonly DependencyProperty IsDropTargetProperty = DependencyProperty.Register(
+            nameof(IsDropTarget), typeof(bool), typeof(LauncherListBoxItem),
+            new FrameworkPropertyMetadata(false));
+
+        public static readonly DependencyProperty DropInsertAfterProperty = DependencyProperty.Register(
+            nameof(DropInsertAfter), typeof(bool), typeof(LauncherListBoxItem),
+            new FrameworkPropertyMetadata(false));
+
+        public static readonly DependencyProperty IsDragSourceProperty = DependencyProperty.Register(
+            nameof(IsDragSource), typeof(bool), typeof(LauncherListBoxItem),
+            new FrameworkPropertyMetadata(false));
+
         protected LauncherListBox ParentListBox => this.FindAncestor<LauncherListBox>();
+
+        public bool IsDropTarget
+        {
+            get => (bool)GetValue(IsDropTargetProperty);
+            set => SetValue(IsDropTargetProperty, value);
+        }
+
+        public bool DropInsertAfter
+        {
+            get => (bool)GetValue(DropInsertAfterProperty);
+            set => SetValue(DropInsertAfterProperty, value);
+        }
+
+        public bool IsDragSource
+        {
+            get => (bool)GetValue(IsDragSourceProperty);
+            set => SetValue(IsDragSourceProperty, value);
+        }
 
         public event RoutedEventHandler Invoked
         {
@@ -38,6 +68,7 @@ namespace FocLauncher.Controls
         public LauncherListBoxItem()
         {
             Focusable = true;
+            AllowDrop = true;
             AddHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(OnMouseDown), true);
         }
 

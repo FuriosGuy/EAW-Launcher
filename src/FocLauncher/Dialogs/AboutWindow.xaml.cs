@@ -53,6 +53,12 @@ namespace FocLauncher.Dialogs
             e.Handled = true;
         }
 
+        private void OpenRepositorySite(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

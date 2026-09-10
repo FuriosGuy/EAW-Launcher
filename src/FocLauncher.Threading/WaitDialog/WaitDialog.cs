@@ -148,7 +148,7 @@ namespace FocLauncher.WaitDialog
                 _initializationArguments = new DialogInitializationArguments();
                 _initializationArguments.AppMainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
                 _initializationArguments.AppProcessId = Process.GetCurrentProcess().Id;
-                _initializationArguments.AppName = "FoC Launcher";
+                _initializationArguments.AppName = "EMPIRE AT WAR Launcher";
                 _initializationArguments.CancelText = "Cancel";
                 InitializeFontAndColorInformation();
             }

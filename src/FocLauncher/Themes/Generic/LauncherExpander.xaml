@@ -23,11 +23,11 @@
                                         </TransformGroup.Children>
                                     </TransformGroup>
                                 </FrameworkElement.LayoutTransform>
-                                <Ellipse x:Name="circle" Fill="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackground}}" HorizontalAlignment="Center" 
-                                         Height="19" Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorder}}" VerticalAlignment="Center" Width="19"/>
+                                <Ellipse x:Name="circle" Fill="{DynamicResource PanelBrush}" HorizontalAlignment="Center"
+                                         Height="19" Stroke="{DynamicResource BorderStrongBrush}" VerticalAlignment="Center" Width="19"/>
                                 <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 8,1.5 " HorizontalAlignment="Center"
                                       SnapsToDevicePixels="false"
-                                      Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyph}}" StrokeThickness="2"
+                                      Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="2"
                                       VerticalAlignment="Center"/>
                             </Grid>
                             <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="true"
@@ -39,23 +39,23 @@
                             <Setter TargetName="arrow" Property="Data" Value="M 1,4.5 L 4.5,1 8,4.5"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsMouseOver" Value="true">
-                            <Setter TargetName="circle" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderHover}}"
+                            <Setter TargetName="circle" Value="{DynamicResource PrimaryBrush}"
                                         Property="Shape.Stroke"/>
                             <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundHover}}"
+                                        Value="{DynamicResource HoverBrush}"
                                         Property="Shape.Fill"/>
-                            <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphHover}}"
+                            <Setter TargetName="arrow" Value="{DynamicResource TextBrush}"
                                         Property="Shape.Stroke"/>
                         </Trigger>
                         <Trigger Property="ButtonBase.IsPressed" Value="true">
                             <Setter TargetName="circle" Property="Shape.StrokeThickness" Value="1.5"/>
                             <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderDown}}"
+                                        Value="{DynamicResource PrimaryHoverBrush}"
                                         Property="Shape.Stroke"/>
                             <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundDown}}"
+                                        Value="{DynamicResource PrimaryPressedBrush}"
                                         Property="Shape.Fill"/>
-                            <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphDown}}"
+                            <Setter TargetName="arrow" Value="{DynamicResource SelectionTextBrush}"
                                         Property="Shape.Stroke"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -65,7 +65,7 @@
     </Style>
 
     <Style TargetType="{x:Type controls:LauncherExpander}">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -76,7 +76,7 @@
                 <ControlTemplate TargetType="{x:Type controls:LauncherExpander}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
+                                Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
                         <DockPanel>
                             <ToggleButton x:Name="HeaderSite" DockPanel.Dock="Bottom"
                                               IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
@@ -97,8 +97,8 @@
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <Trigger Property="UIElement.IsEnabled" Value="false">
-                            <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxTextDisabled}}"/>
+                                <Trigger Property="UIElement.IsEnabled" Value="false">
+                            <Setter Property="Control.Foreground" Value="{DynamicResource DisabledTextBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

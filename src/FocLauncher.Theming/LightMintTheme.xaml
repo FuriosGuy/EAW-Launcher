@@ -1,0 +1,50 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="LightTheme.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Color x:Key="AppBackgroundColor">#F4FBF8</Color>
+    <Color x:Key="SidebarColor">#FFFFFF</Color>
+    <Color x:Key="PanelColor">#FFFFFF</Color>
+    <Color x:Key="PanelRaisedColor">#ECF8F3</Color>
+    <Color x:Key="BorderColor">#CFE7DC</Color>
+    <Color x:Key="BorderStrongColor">#A8C8B8</Color>
+    <Color x:Key="PrimaryColor">#059669</Color>
+    <Color x:Key="PrimaryHoverColor">#047857</Color>
+    <Color x:Key="PrimaryPressedColor">#065F46</Color>
+    <Color x:Key="AccentColor">#0F766E</Color>
+    <Color x:Key="AccentHoverColor">#14B8A6</Color>
+    <Color x:Key="SelectedColor">#D1FAE5</Color>
+    <Color x:Key="SelectedInactiveColor">#E4F1EB</Color>
+    <Color x:Key="HoverColor">#ECFDF5</Color>
+    <Color x:Key="HoverBorderColor">#86C7A9</Color>
+    <Color x:Key="ControlHoverBorderColor">#4DBF8E</Color>
+    <Color x:Key="OverlayColor">#FFFFFF</Color>
+    <Color x:Key="DropIndicatorColor">#059669</Color>
+    <Color x:Key="TitleBarColor">#FFFFFF</Color>
+    <Color x:Key="TitleBarTextColor">#14532D</Color>
+    <Color x:Key="WindowGlyphColor">#059669</Color>
+
+    <SolidColorBrush x:Key="AppBackgroundBrush" Color="{StaticResource AppBackgroundColor}"/>
+    <SolidColorBrush x:Key="SidebarBrush" Color="{StaticResource SidebarColor}"/>
+    <SolidColorBrush x:Key="PanelBrush" Color="{StaticResource PanelColor}"/>
+    <SolidColorBrush x:Key="PanelRaisedBrush" Color="{StaticResource PanelRaisedColor}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource BorderStrongColor}"/>
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}"/>
+    <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}"/>
+    <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource SelectedColor}"/>
+    <SolidColorBrush x:Key="SelectedInactiveBrush" Color="{StaticResource SelectedInactiveColor}"/>
+    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}"/>
+    <SolidColorBrush x:Key="HoverBorderBrush" Color="{StaticResource HoverBorderColor}"/>
+    <SolidColorBrush x:Key="ControlHoverBorderBrush" Color="{StaticResource ControlHoverBorderColor}"/>
+    <SolidColorBrush x:Key="OverlayBrush" Color="{StaticResource OverlayColor}"/>
+    <SolidColorBrush x:Key="DropIndicatorBrush" Color="{StaticResource DropIndicatorColor}"/>
+    <SolidColorBrush x:Key="TitleBarBrush" Color="{StaticResource TitleBarColor}"/>
+    <SolidColorBrush x:Key="TitleBarTextBrush" Color="{StaticResource TitleBarTextColor}"/>
+    <SolidColorBrush x:Key="WindowGlyphBrush" Color="{StaticResource WindowGlyphColor}"/>
+</ResourceDictionary>

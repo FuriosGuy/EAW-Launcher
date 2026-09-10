@@ -58,6 +58,30 @@ namespace FocLauncher.Properties {
                 this["DefaultTheme"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseGameArtwork {
+            get {
+                return ((bool)(this["UseGameArtwork"]));
+            }
+            set {
+                this["UseGameArtwork"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultSubTheme {
+            get {
+                return ((string)(this["DefaultSubTheme"]));
+            }
+            set {
+                this["DefaultSubTheme"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -68,6 +92,42 @@ namespace FocLauncher.Properties {
             }
             set {
                 this["LanguageFallback"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("980")]
+        public double WindowWidth {
+            get {
+                return ((double)(this["WindowWidth"]));
+            }
+            set {
+                this["WindowWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("720")]
+        public double WindowHeight {
+            get {
+                return ((double)(this["WindowHeight"]));
+            }
+            set {
+                this["WindowHeight"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("224")]
+        public double SidebarWidth {
+            get {
+                return ((double)(this["SidebarWidth"]));
+            }
+            set {
+                this["SidebarWidth"] = value;
             }
         }
     }

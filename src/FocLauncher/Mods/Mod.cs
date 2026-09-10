@@ -6,6 +6,8 @@ using EawModinfo.Spec;
 using FocLauncher.Game;
 using FocLauncher.Game.Language;
 using FocLauncher.Utilities;
+using HtmlAgilityPack;
+using System.Threading.Tasks;
 
 namespace FocLauncher.Mods
 {
@@ -133,15 +135,92 @@ namespace FocLauncher.Mods
 
         protected override string? InitializeIcon()
         {
-            var iconFile = base.InitializeIcon();
-            if (!string.IsNullOrEmpty(iconFile))
-                iconFile = Path.Combine(Directory.FullName, iconFile!);
-            else
+            var declaredIcon = base.InitializeIcon();
+            if (!string.IsNullOrEmpty(declaredIcon))
             {
-                var icon = Directory.EnumerateFiles("*.ico");
-                iconFile = icon.FirstOrDefault()?.FullName;
+                try
+                {
+                    var iconPath = Path.Combine(Directory.FullName, declaredIcon);
+                    if (File.Exists(iconPath))
+                        return iconPath;
+                }
+                catch (ArgumentException)
+                {
+                    // Invalid modinfo icon path falls through to file discovery.
+                }
             }
-            return iconFile;
+
+            try
+            {
+                var directIcon = System.IO.Directory.EnumerateFiles(Directory.FullName, "*.*", SearchOption.TopDirectoryOnly)
+                    .Where(IsSupportedImageFile)
+                    .OrderBy(GetIconPriority)
+                    .ThenBy(path => path, StringComparer.OrdinalIgnoreCase)
+                    .FirstOrDefault();
+                if (!string.IsNullOrEmpty(directIcon))
+                    return directIcon;
+
+                return System.IO.Directory.EnumerateFiles(Directory.FullName, "*.*", SearchOption.AllDirectories)
+                    .Where(path => IsSupportedImageFile(path) && IsNamedIconFile(path))
+                    .OrderBy(GetIconPriority)
+                    .ThenBy(path => path, StringComparer.OrdinalIgnoreCase)
+                    .FirstOrDefault();
+            }
+            catch (IOException)
+            {
+                return null;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return null;
+            }
+        }
+
+        internal async Task<string?> ResolveIconFileAsync(HtmlDocument? workshopPage)
+        {
+            var fileIcon = IconFile;
+            if (!WorkshopMod)
+                return fileIcon;
+
+            var workshopIcon = await WorkshopImageResolver.ResolveAsync(Identifier, workshopPage).ConfigureAwait(false);
+            return workshopIcon ?? fileIcon;
+        }
+
+        private static bool IsSupportedImageFile(string path)
+        {
+            switch (Path.GetExtension(path).ToLowerInvariant())
+            {
+                case ".bmp":
+                case ".gif":
+                case ".ico":
+                case ".jpeg":
+                case ".jpg":
+                case ".png":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsNamedIconFile(string path)
+        {
+            var name = Path.GetFileNameWithoutExtension(path);
+            return name.IndexOf("icon", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   name.IndexOf("logo", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   name.IndexOf("thumb", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private static int GetIconPriority(string path)
+        {
+            var name = Path.GetFileNameWithoutExtension(path);
+            if (string.Equals(name, "icon", StringComparison.OrdinalIgnoreCase))
+                return 0;
+            if (string.Equals(name, "logo", StringComparison.OrdinalIgnoreCase))
+                return 1;
+            if (name.IndexOf("thumbnail", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                name.IndexOf("thumb", StringComparison.OrdinalIgnoreCase) >= 0)
+                return 2;
+            return 3;
         }
 
         internal static string CreateInternalPath(DirectoryInfo directory)

@@ -71,8 +71,10 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
+    <Compile Include="Controls\AcrylicBackdrop.cs" />
     <Compile Include="Controls\LauncherExpander.cs" />
     <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Controls\ModOrderButton.cs" />
     <Compile Include="Controls\LauncherRadioButton.cs" />
     <Compile Include="Controls\OptionsControl.xaml.cs">
       <DependentUpon>OptionsControl.xaml</DependentUpon>
@@ -120,6 +122,8 @@
     <Compile Include="Controls\PlayButton.cs" />
     <Compile Include="Controls\StatusBarButton.cs" />
     <Compile Include="Converters\DebugBuildToVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\NullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Dialogs\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +159,10 @@
     <Compile Include="Controls\Controllers\IInvocationController.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
+    <Compile Include="Profiles\LauncherProfile.cs" />
+    <Compile Include="Profiles\ProfileGameKey.cs" />
+    <Compile Include="Profiles\ProfileModKey.cs" />
+    <Compile Include="Profiles\ProfileStore.cs" />
     <Compile Include="Game\GameCommandArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="LauncherGameManager.cs" />
@@ -181,6 +189,7 @@
     <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
+    <Compile Include="Utilities\WorkshopImageResolver.cs" />
     <Compile Include="Utilities\ModInfoExtension.cs" />
     <Compile Include="Utilities\ProcessCreationListener.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />
@@ -380,6 +389,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\eaw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Art\foc-art.jpg" />
+    <Resource Include="Resources\Art\eaw-art.jpg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

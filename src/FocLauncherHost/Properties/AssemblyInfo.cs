@@ -7,12 +7,12 @@ using System.Windows;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("FoC Launcher Bootstrapper")]
-[assembly: AssemblyDescription("Mod and game launcher for Star Wars Empire at War: Forces of Corruption")]
+[assembly: AssemblyTitle("EMPIRE AT WAR Launcher")]
+[assembly: AssemblyDescription("Launcher for Star Wars Empire at War with mod presets and game artwork")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Republic at War Modding Team")]
-[assembly: AssemblyProduct("FoC Launcher")]
-[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
+[assembly: AssemblyCompany("FuriosGuy")]
+[assembly: AssemblyProduct("EMPIRE AT WAR Launcher")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker; modifications © 2026 FuriosGuy")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,8 +51,8 @@ using System.Windows;
 // Sie können alle Werte angeben oder Standardwerte für die Build- und Revisionsnummern verwenden,
 // indem Sie "*" wie unten gezeigt eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.8")]
-[assembly: AssemblyFileVersion("1.0.0.8")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("")]
 
 [assembly: InternalsVisibleTo("FocLauncher.Updater.Tests")]

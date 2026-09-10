@@ -16,7 +16,7 @@ namespace FocLauncher.Game
         public static async Task SetupSteamGamesAsync(CancellationToken cancellationToken = default)
         {
             var data = new WaitDialogProgressData(WaitMessage, null, null, true);
-            using var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+            using var s = WaitDialogFactory.Instance.StartWaitDialog("EMPIRE AT WAR Launcher", data, TimeSpan.FromSeconds(2));
             var linkedToken =
                 CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, s.UserCancellationToken);
             await SetupSteamGameCoreAsync(linkedToken.Token, s.Progress);
