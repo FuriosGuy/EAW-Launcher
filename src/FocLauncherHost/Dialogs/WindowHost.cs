@@ -29,6 +29,17 @@ namespace FocLauncherHost.Dialogs
             HostWindow.ShowDialog();
         }
 
+        protected void UseModernChrome()
+        {
+            HostWindow.WindowStyle = WindowStyle.None;
+            HostWindow.AllowsTransparency = true;
+            HostWindow.Background = System.Windows.Media.Brushes.Transparent;
+            HostWindow.ShowInTaskbar = false;
+            HostWindow.UseLayoutRounding = true;
+            HostWindow.SnapsToDevicePixels = true;
+            HostWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
         [DllImport("User32", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);

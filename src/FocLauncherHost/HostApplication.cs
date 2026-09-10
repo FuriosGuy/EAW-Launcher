@@ -50,7 +50,7 @@ namespace FocLauncherHost
 
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
-                    SplashScreen.ProgressText = "Please wait while the launcher is downloading an update.";
+                    SplashScreen.ProgressText = "Checking for launcher updates...";
                     SetWhenWaitDialogIsShownAsync(WaitProgressDelay, SplashScreen.CancellationToken).Forget();
                     var cts = CancellationTokenSource.CreateLinkedTokenSource(SplashScreen.CancellationToken);
                     

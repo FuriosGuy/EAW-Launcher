@@ -16,6 +16,10 @@ Keep generated metadata at the directory root and the files inside `Stable`,
 `Beta`, or `Test` according to their release channel. The GitHub Release ZIP
 is for initial/manual installation; the raw feed is what in-app updating uses.
 
+Release ZIPs keep bootstrap launcher and documentation at package root.
+Bundled updater/runtime payload files live under `Runtime`; launcher extracts
+and manages installed runtime automatically.
+
 The expected layout is:
 
 ```text

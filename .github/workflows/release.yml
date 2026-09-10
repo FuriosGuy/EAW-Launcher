@@ -136,8 +136,16 @@ jobs:
           if (Test-Path -LiteralPath $artifactRoot) {
             Remove-Item -LiteralPath $artifactRoot -Recurse -Force
           }
-          New-Item -ItemType Directory -Path $stage -Force | Out-Null
-          Copy-Item -Path (Join-Path $releaseSourceBuild '*') -Destination $stage -Recurse -Force
+          $runtimeStage = Join-Path $stage 'Runtime'
+          New-Item -ItemType Directory -Path $runtimeStage -Force | Out-Null
+          Copy-Item -LiteralPath (Join-Path $releaseSourceBuild 'EMPIRE AT WAR Launcher.exe') -Destination $stage -Force
+          $runtimeFiles = @(
+            (Join-Path $releaseSourceBuild 'EMPIRE AT WAR Launcher Updater.exe'),
+            (Join-Path $releaseSourceBuild 'FocLauncher.dll'),
+            (Join-Path $releaseSourceBuild 'FocLauncher.Theming.dll'),
+            (Join-Path $releaseSourceBuild 'FocLauncher.Threading.dll')
+          )
+          Copy-Item -Path $runtimeFiles -Destination $runtimeStage -Force
           Copy-Item README.md, LICENSE, THIRD-PARTY-NOTICES.txt -Destination $stage -Force
           Get-ChildItem -LiteralPath $stage -Recurse -Filter '*.pdb' | Remove-Item -Force
 
@@ -167,8 +175,8 @@ jobs:
           New-Item -ItemType Directory -Path $targetChannel -Force | Out-Null
           Copy-Item -Path (Join-Path $env:GITHUB_WORKSPACE "release-feed\$env:RELEASE_CHANNEL\*") -Destination $targetChannel -Force
 
-          git -C $feedCheckout config user.name 'github-actions[bot]'
-          git -C $feedCheckout config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C $feedCheckout config user.name 'FuriosGuy'
+          git -C $feedCheckout config user.email 'FuriosGuy@users.noreply.github.com'
           git -C $feedCheckout add -A -- releases
           git -C $feedCheckout commit -m "Publish $env:RELEASE_TAG updater feed [skip ci]"
           $commitExit = $LASTEXITCODE
