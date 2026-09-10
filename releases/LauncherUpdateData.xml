@@ -4,21 +4,21 @@
     <Dependencies>
       <Dependency Name="EMPIRE AT WAR Launcher.exe" Version="1.0.0.0">
         <Destination>%EXECUTABLE%</Destination>
-        <Size>13919744</Size>
+        <Size>13929984</Size>
         <Origin>https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/Stable/EMPIRE AT WAR Launcher.exe</Origin>
-        <SHA2>94400AFF90D1CB92713A0A810ED038133CFABD777F0B8CF04DA35A2E64460FAE</SHA2>
+        <SHA2>451E29CCF4DD06BFC5561F724D11D612AE48B2C15EA81A76748906CCFE74E056</SHA2>
       </Dependency>
       <Dependency Name="EMPIRE AT WAR Launcher Updater.exe" Version="1.0.0.0">
         <Destination>%APPLICATIONBASE%</Destination>
         <Size>1829376</Size>
         <Origin>https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/Stable/EMPIRE AT WAR Launcher Updater.exe</Origin>
-        <SHA2>5BC6D30343071898216180F26EAA694F0E91DA905A8897A7046F3C8C3F1DECBE</SHA2>
+        <SHA2>F11903B7C3036A45474E2DD576064F5BA824162912A5C3C091FD1A6A1033914E</SHA2>
       </Dependency>
       <Dependency Name="FocLauncher.dll" Version="1.0.0.0">
         <Destination>%APPLICATIONBASE%</Destination>
         <Size>4995584</Size>
         <Origin>https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/Stable/FocLauncher.dll</Origin>
-        <SHA2>0E28710ED31840B018116B4B852B8DC0D9B8F4C006469841AFA38AFAFC907565</SHA2>
+        <SHA2>4E3B4508DD827DDDD9C1A74B0E62BD5222D565A1E09B3C0CAE5421751412E82F</SHA2>
       </Dependency>
       <Dependency Name="FocLauncher.Theming.dll" Version="1.0.0.0">
         <Destination>%APPLICATIONBASE%</Destination>
