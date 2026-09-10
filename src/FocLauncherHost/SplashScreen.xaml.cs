@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using FocLauncher;
 using FocLauncher.Theming;
@@ -116,8 +117,18 @@ namespace FocLauncherHost
 
         private void OnCancel(object sender, RoutedEventArgs e)
         {
-            if (_cancelable)
-                _cancellationTokenSource.Cancel();
+            if (!_cancelable)
+                return;
+
+            Cancelable = false;
+            ProgressText = "Cancelling update...";
+            _cancellationTokenSource.Cancel();
+        }
+
+        private void OnTitleBarMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
         }
     }
 }

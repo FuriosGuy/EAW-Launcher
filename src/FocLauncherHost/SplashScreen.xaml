@@ -5,7 +5,7 @@
         xmlns:converters1="clr-namespace:FocLauncherHost.Converters"
         ResizeMode="NoResize" ShowInTaskbar="True" WindowStartupLocation="CenterScreen"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
-        Width="560" Height="400" UseLayoutRounding="True" SnapsToDevicePixels="True"
+        Width="600" Height="440" UseLayoutRounding="True" SnapsToDevicePixels="True"
         TextOptions.TextFormattingMode="Ideal" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <FrameworkElement.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -80,7 +80,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="{DynamicResource TitleBarBrush}" CornerRadius="20,20,0,0" Padding="24,20,24,16">
+            <Border Grid.Row="0" Background="{DynamicResource TitleBarBrush}" CornerRadius="20,20,0,0" Padding="24,20,24,16" MouseLeftButtonDown="OnTitleBarMouseDown">
                 <Grid>
                     <StackPanel>
                         <TextBlock Text="EMPIRE AT WAR" Foreground="{DynamicResource TitleBarTextBrush}" FontFamily="Segoe UI"
@@ -106,8 +106,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Width="220" Height="220" CornerRadius="20" Background="{DynamicResource IconBackgroundBrush}"
-                        BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1" HorizontalAlignment="Left">
+                <Border Grid.Column="0" Width="220" Height="220" CornerRadius="20" Background="Transparent"
+                        BorderBrush="Transparent" BorderThickness="0" HorizontalAlignment="Left">
                     <Grid ClipToBounds="True">
                         <Image Source="Resources/splash.png" Stretch="Uniform" Margin="10"
                                RenderOptions.BitmapScalingMode="Fant"/>

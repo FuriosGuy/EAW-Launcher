@@ -7,7 +7,7 @@
              xmlns:dialogs="clr-namespace:FocLauncherHost.Dialogs"
              xmlns:converters="clr-namespace:FocLauncherHost.Converters"
              mc:Ignorable="d" d:DesignHeight="360" d:DesignWidth="600"
-             Width="600" MinHeight="330" Background="Transparent" Foreground="{DynamicResource TextBrush}"
+             Width="560" Height="320" MinHeight="320" Background="Transparent" Foreground="{DynamicResource TextBrush}"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <FrameworkElement.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -44,7 +44,7 @@
         <Border.Effect><DropShadowEffect BlurRadius="26" ShadowDepth="8" Opacity="0.42" Color="#FF000000"/></Border.Effect>
         <Grid>
             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-            <Border Grid.Row="0" Background="{DynamicResource TitleBarBrush}" CornerRadius="14,14,0,0" Padding="16,10">
+            <Border Grid.Row="0" Background="{DynamicResource TitleBarBrush}" CornerRadius="14,14,0,0" Padding="16,10" MouseLeftButtonDown="MoveWindow">
                 <StackPanel>
                     <TextBlock Text="EMPIRE AT WAR Launcher" Foreground="{DynamicResource TitleBarTextBrush}" FontSize="12" FontWeight="SemiBold"/>
                     <TextBlock Text="Files required for update are locked" Foreground="{DynamicResource TitleBarTextBrush}" FontSize="18" FontWeight="Bold" Margin="0,2,0,0"/>

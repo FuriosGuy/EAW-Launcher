@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Input;
 using FocLauncher.Theming;
 
 namespace FocLauncherHost.Dialogs
@@ -52,6 +53,12 @@ namespace FocLauncherHost.Dialogs
             {
                 // Updater dialogs must remain usable if saved theme resources are unavailable.
             }
+        }
+
+        protected void MoveWindow(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                HostWindow.DragMove();
         }
 
         [DllImport("User32", CharSet = CharSet.Auto)]
