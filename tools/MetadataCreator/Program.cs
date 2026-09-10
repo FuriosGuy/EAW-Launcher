@@ -18,7 +18,7 @@ namespace MetadataCreator
 {
     internal class Program
     {
-        private const string DefaultFileRootPath = "https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/main/releases";
+        private const string DefaultFileRootPath = "https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases";
         public static readonly string[] SupportedFileEndings = {".exe", ".dll"};
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -84,7 +84,8 @@ namespace MetadataCreator
             catch (Exception e)
             {
                 Logger.Fatal(e, $"The tool failed with an error: {e.Message}");
-                Console.ReadKey();
+                if (!Console.IsInputRedirected && !Console.IsOutputRedirected)
+                    Console.ReadKey();
                 return e.HResult;
             }
             return 0;

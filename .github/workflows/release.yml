@@ -1,0 +1,196 @@
+name: Build and publish launcher release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set version from tag
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $version = $env:RELEASE_TAG -replace '^v', '' -replace '-.*$', ''
+          pwsh -NoProfile -File tools/Set-LauncherVersion.ps1 -Version $version
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Set up NuGet
+        uses: NuGet/setup-nuget@v3
+
+      - name: Restore solution
+        shell: pwsh
+        run: nuget restore FocLauncher.sln
+
+      - name: Build Release configuration
+        shell: pwsh
+        run: |
+          msbuild src/FocLauncherHost/FocLauncherHost.csproj /t:Rebuild /p:Configuration=Release /p:Platform=AnyCPU /m:1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          msbuild tools/MetadataCreator/MetadataCreator.csproj /t:Rebuild /p:Configuration=Release /p:Platform=AnyCPU /m:1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Determine release channel
+        id: release-info
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if ($env:RELEASE_TAG -match '-beta') {
+            $channel = 'Beta'
+            $integration = '1'
+            $prerelease = 'true'
+          } elseif ($env:RELEASE_TAG -match '-test') {
+            $channel = 'Test'
+            $integration = '1'
+            $prerelease = 'true'
+          } else {
+            $channel = 'Stable'
+            $integration = '0'
+            $prerelease = 'false'
+          }
+
+          "channel=$channel" >> $env:GITHUB_OUTPUT
+          "integration=$integration" >> $env:GITHUB_OUTPUT
+          "prerelease=$prerelease" >> $env:GITHUB_OUTPUT
+
+      - name: Generate updater feed
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_CHANNEL: ${{ steps.release-info.outputs.channel }}
+          INTEGRATION_MODE: ${{ steps.release-info.outputs.integration }}
+        run: |
+          $metadataCreator = Join-Path $env:GITHUB_WORKSPACE 'tools\MetadataCreator\bin\Release\MetadataCreator.exe'
+          if (-not (Test-Path -LiteralPath $metadataCreator)) {
+            throw "MetadataCreator.exe not found at $metadataCreator"
+          }
+
+          $hostOutput = Join-Path $env:GITHUB_WORKSPACE 'src\FocLauncherHost\bin\Release'
+          $releaseSource = Join-Path $env:GITHUB_WORKSPACE 'release-source'
+          $releaseSourceBuild = Join-Path $releaseSource 'Release'
+          $sourceFiles = @(
+            (Join-Path $env:GITHUB_WORKSPACE 'src\FocLauncher.AppUpdater\bin\Release\EMPIRE AT WAR Launcher Updater.exe'),
+            (Join-Path $env:GITHUB_WORKSPACE 'src\FocLauncher\bin\Release\FocLauncher.dll'),
+            (Join-Path $env:GITHUB_WORKSPACE 'src\FocLauncher.Theming\bin\Release\FocLauncher.Theming.dll'),
+            (Join-Path $env:GITHUB_WORKSPACE 'src\FocLauncher.Threading\bin\Release\FocLauncher.Threading.dll')
+          )
+          if (-not (Test-Path -LiteralPath $hostOutput)) {
+            throw "Release host output not found at $hostOutput"
+          }
+          foreach ($sourceFile in $sourceFiles) {
+            if (-not (Test-Path -LiteralPath $sourceFile)) {
+              throw "Release staging input not found at $sourceFile"
+            }
+          }
+          if (Test-Path -LiteralPath $releaseSource) {
+            Remove-Item -LiteralPath $releaseSource -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $releaseSourceBuild | Out-Null
+          Copy-Item -Path (Join-Path $hostOutput '*') -Destination $releaseSourceBuild -Recurse -Force
+          Copy-Item -Path $sourceFiles -Destination $releaseSourceBuild -Force
+
+          $feed = Join-Path $env:GITHUB_WORKSPACE 'release-feed'
+          if (Test-Path -LiteralPath $feed) {
+            Remove-Item -LiteralPath $feed -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $feed | Out-Null
+
+          $metadataUrl = 'https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/LauncherUpdateData.xml'
+          $fileRoot = 'https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases'
+          & $metadataCreator -o $feed -b Release -s $releaseSource -f $metadataUrl -r $fileRoot -t $env:RELEASE_CHANNEL -m ([int]$env:INTEGRATION_MODE) -l $feed
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Package launcher
+        id: package
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_CHANNEL: ${{ steps.release-info.outputs.channel }}
+        run: |
+          $releaseSource = Join-Path $env:GITHUB_WORKSPACE 'release-source'
+          $releaseSourceBuild = Join-Path $releaseSource 'Release'
+          if (-not (Test-Path -LiteralPath $releaseSourceBuild)) {
+            throw "Release staging output not found at $releaseSourceBuild"
+          }
+
+          $artifactRoot = Join-Path $env:GITHUB_WORKSPACE 'artifacts'
+          $stage = Join-Path $artifactRoot 'EMPIRE AT WAR Launcher'
+          if (Test-Path -LiteralPath $artifactRoot) {
+            Remove-Item -LiteralPath $artifactRoot -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $stage -Force | Out-Null
+          Copy-Item -Path (Join-Path $releaseSourceBuild '*') -Destination $stage -Recurse -Force
+          Copy-Item README.md, LICENSE, THIRD-PARTY-NOTICES.txt -Destination $stage -Force
+          Get-ChildItem -LiteralPath $stage -Recurse -Filter '*.pdb' | Remove-Item -Force
+
+          $zip = Join-Path $artifactRoot "EMPIRE AT WAR Launcher-$env:RELEASE_TAG-windows.zip"
+          Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
+          "zip=$zip" >> $env:GITHUB_OUTPUT
+
+      - name: Publish updater feed to master
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_CHANNEL: ${{ steps.release-info.outputs.channel }}
+        run: |
+          $feedCheckout = Join-Path $env:GITHUB_WORKSPACE 'feed-checkout'
+          git clone --branch master --single-branch "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git" $feedCheckout
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          $targetFeed = Join-Path $feedCheckout 'releases'
+          New-Item -ItemType Directory -Path $targetFeed -Force | Out-Null
+          Copy-Item -Path (Join-Path $env:GITHUB_WORKSPACE 'release-feed\LauncherUpdateData.xml') -Destination $targetFeed -Force
+
+          $targetChannel = Join-Path $targetFeed $env:RELEASE_CHANNEL
+          New-Item -ItemType Directory -Path $targetChannel -Force | Out-Null
+          Copy-Item -Path (Join-Path $env:GITHUB_WORKSPACE "release-feed\$env:RELEASE_CHANNEL\*") -Destination $targetChannel -Force
+
+          git -C $feedCheckout config user.name 'github-actions[bot]'
+          git -C $feedCheckout config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C $feedCheckout add -A -- releases
+          git -C $feedCheckout commit -m "Publish $env:RELEASE_TAG updater feed [skip ci]"
+          $commitExit = $LASTEXITCODE
+          if ($commitExit -ne 0 -and $commitExit -ne 1) { exit $commitExit }
+          if ($commitExit -eq 0) {
+            git -C $feedCheckout push origin HEAD:master
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_PRERELEASE: ${{ steps.release-info.outputs.prerelease }}
+          RELEASE_ZIP: ${{ steps.package.outputs.zip }}
+        run: |
+          $arguments = @(
+            'release', 'create', $env:RELEASE_TAG, $env:RELEASE_ZIP,
+            '--repo', $env:GITHUB_REPOSITORY,
+            '--title', "EMPIRE AT WAR Launcher $env:RELEASE_TAG",
+            '--generate-notes'
+          )
+          if ($env:RELEASE_PRERELEASE -eq 'true') {
+            $arguments += '--prerelease'
+          }
+          & gh @arguments
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

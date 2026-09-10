@@ -1,0 +1,44 @@
+name: Build launcher
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Set up NuGet
+        uses: NuGet/setup-nuget@v3
+
+      - name: Restore solution
+        shell: pwsh
+        run: nuget restore FocLauncher.sln
+
+      - name: Build Release configuration
+        shell: pwsh
+        run: |
+          msbuild src/FocLauncherHost/FocLauncherHost.csproj /t:Build /p:Configuration=Release /p:Platform=AnyCPU /m:1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          msbuild tools/MetadataCreator/MetadataCreator.csproj /t:Build /p:Configuration=Release /p:Platform=AnyCPU /m:1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -1,125 +1,124 @@
 @echo off
+setlocal EnableExtensions
 
-:constants
-set MS_BUILD_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
-set BUILD_PLATFORM="Any CPU"
+rem Build launcher, generate update metadata, and refresh the tracked release feed.
+rem GitHub Actions handles tagged public releases automatically.
 
-set METADATA_OUTPUT="releases"
-set CURRENT_METADATA_LOCATION="https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/main/releases/LauncherUpdateData.xml"
-rem Override EAW_LAUNCHER_BUILDS when using a separate artifact repository.
-if defined EAW_LAUNCHER_BUILDS (
-    set COPY_FILES_LOCATION="%EAW_LAUNCHER_BUILDS%"
-) else (
-    set COPY_FILES_LOCATION="%~dp0releases"
+set "ROOT=%~dp0"
+set "HOST_PROJECT=%ROOT%src\FocLauncherHost\FocLauncherHost.csproj"
+set "METADATA_PROJECT=%ROOT%tools\MetadataCreator\MetadataCreator.csproj"
+set "RELEASE_FEED=%ROOT%releases"
+set "METADATA_CREATOR=%ROOT%tools\MetadataCreator\bin\Release\MetadataCreator.exe"
+set "RELEASE_OUTPUT=%ROOT%src\FocLauncherHost\bin\Release"
+set "RELEASE_SOURCE=%ROOT%artifacts\release-source"
+set "RELEASE_SOURCE_BUILD=%ROOT%artifacts\release-source\Release"
+set "APP_UPDATER_OUTPUT=%ROOT%src\FocLauncher.AppUpdater\bin\Release"
+set "LAUNCHER_OUTPUT=%ROOT%src\FocLauncher\bin\Release"
+set "THEMING_OUTPUT=%ROOT%src\FocLauncher.Theming\bin\Release"
+set "THREADING_OUTPUT=%ROOT%src\FocLauncher.Threading\bin\Release"
+set "UPDATE_METADATA_URL=https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/LauncherUpdateData.xml"
+set "UPDATE_FILE_ROOT=https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases"
+set "BUILD_PLATFORM=AnyCPU"
+set "MSBUILD_PATH="
+
+if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" (
+    for /f "usebackq delims=" %%I in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe`) do if not defined MSBUILD_PATH set "MSBUILD_PATH=%%I"
 )
 
-set METADATA_CREATOR_BIN=".\tools\MetadataCreator\bin"
-set METADATA_CREATOR_FILE="MetadataCreator.exe"
+if not defined MSBUILD_PATH if exist "%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" set "MSBUILD_PATH=%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
+if not defined MSBUILD_PATH if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe" set "MSBUILD_PATH=%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
 
-
-:configureBuild
-echo "Select [B] to build or [R] to rebuild the visual studio solution"
-CHOICE /C BR
-IF %ERRORLEVEL% EQU 1 set BUILD_TYPE="Build"
-IF %ERRORLEVEL% EQU 2 set BUILD_TYPE="Rebuild"
-
-echo "Select [D] or [R] to build as [D]ebug or [R]elease"
-CHOICE /C DR
-IF %ERRORLEVEL% EQU 1 set BUILD_CONFIG="Debug"
-IF %ERRORLEVEL% EQU 2 set BUILD_CONFIG="Release"
-
-
-:build
-echo %BUILD_TYPE% with configuration %BUILD_CONFIG% on platfrom %BUILD_PLATFORM%
-
-%MS_BUILD_PATH% FocLauncher.sln /t:%BUILD_TYPE% /p:Configuration=%BUILD_CONFIG% /p:Platform=%BUILD_PLATFORM% /m
-set BUILD_STATUS=%ERRORLEVEL% 
-
-if %BUILD_STATUS%==0 goto buildSuccess 
-if not %BUILD_STATUS%==0 goto fail 
- 
-:buildSuccess 
-echo build was successful
-pause 
-goto copyMetadataCreator
-
-
-:copyMetadataCreator
-
-echo removing old metadata creator
-if exist %METADATA_CREATOR_FILE% (
-	del %METADATA_CREATOR_FILE%
+if not defined MSBUILD_PATH (
+    echo Could not find MSBuild. Install Visual Studio with the .NET desktop build tools.
+    exit /b 1
 )
 
-echo copying metadata creator to current directory
-if exist "%METADATA_CREATOR_BIN%\%BUILD_CONFIG%\%METADATA_CREATOR_FILE%" (
-	copy "%METADATA_CREATOR_BIN%\%BUILD_CONFIG%\%METADATA_CREATOR_FILE%" %METADATA_CREATOR_FILE%
-) else (
-	goto fail
+pushd "%ROOT%"
+
+echo Select [B] to build or [R] to rebuild the solution.
+choice /C BR /N
+if errorlevel 2 (set "BUILD_TARGET=Rebuild") else set "BUILD_TARGET=Build"
+
+echo Select [D]ebug or [R]elease configuration.
+choice /C DR /N
+if errorlevel 2 (set "BUILD_CONFIGURATION=Release") else set "BUILD_CONFIGURATION=Debug"
+
+echo Running %BUILD_TARGET% with %BUILD_CONFIGURATION% using:
+echo %MSBUILD_PATH%
+if defined EAW_LAUNCHER_VERSION (
+    echo Applying launcher version %EAW_LAUNCHER_VERSION%.
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%ROOT%tools\Set-LauncherVersion.ps1" -Version "%EAW_LAUNCHER_VERSION%"
+    if errorlevel 1 goto fail
+)
+echo Restoring NuGet packages.
+"%MSBUILD_PATH%" "%HOST_PROJECT%" /t:Restore /p:Configuration=%BUILD_CONFIGURATION% /p:Platform="%BUILD_PLATFORM%" /m:1
+if errorlevel 1 goto fail
+"%MSBUILD_PATH%" "%METADATA_PROJECT%" /t:Restore /p:Configuration=%BUILD_CONFIGURATION% /p:Platform="%BUILD_PLATFORM%" /m:1
+if errorlevel 1 goto fail
+echo Building the launcher host and metadata tool (production projects only).
+"%MSBUILD_PATH%" "%HOST_PROJECT%" /t:%BUILD_TARGET% /p:Configuration=%BUILD_CONFIGURATION% /p:Platform="%BUILD_PLATFORM%" /m:1
+if errorlevel 1 goto fail
+"%MSBUILD_PATH%" "%METADATA_PROJECT%" /t:%BUILD_TARGET% /p:Configuration=%BUILD_CONFIGURATION% /p:Platform="%BUILD_PLATFORM%" /m:1
+if errorlevel 1 goto fail
+
+if /I not "%BUILD_CONFIGURATION%"=="Release" (
+    echo Debug build complete. Release feed generation requires Release configuration.
+    goto success
 )
 
+if not exist "%METADATA_CREATOR%" (
+    echo MetadataCreator.exe not found at:
+    echo %METADATA_CREATOR%
+    goto fail
+)
 
-:configureMetadata
+if not exist "%RELEASE_OUTPUT%" (
+    echo Release output not found at:
+    echo %RELEASE_OUTPUT%
+    goto fail
+)
 
-echo "Select the appliction type the metadata shall be generated for:"
-echo 1 - Stable
-echo 2 - Beta
-echo 3 - Test
-CHOICE /C 123
-IF %ERRORLEVEL% EQU 1 set APPLICATION_TYPE="Stable"
-IF %ERRORLEVEL% EQU 2 set APPLICATION_TYPE="Beta"
-IF %ERRORLEVEL% EQU 3 set APPLICATION_TYPE="Test"
+if not exist "%APP_UPDATER_OUTPUT%\EMPIRE AT WAR Launcher Updater.exe" goto missingReleaseFile
+if not exist "%LAUNCHER_OUTPUT%\FocLauncher.dll" goto missingReleaseFile
+if not exist "%THEMING_OUTPUT%\FocLauncher.Theming.dll" goto missingReleaseFile
+if not exist "%THREADING_OUTPUT%\FocLauncher.Threading.dll" goto missingReleaseFile
 
-echo "Select the interation mode"
-echo 0 - no integration
-echo 1 - product integration
-echo 2 - full dependency integration
-echo 3 - version based dependency integration
-CHOICE /C 0123
-IF %ERRORLEVEL% EQU 1 set INTEGRATION_MODE=0
-IF %ERRORLEVEL% EQU 2 set INTEGRATION_MODE=1
-IF %ERRORLEVEL% EQU 3 set INTEGRATION_MODE=2
-IF %ERRORLEVEL% EQU 4 set INTEGRATION_MODE=3
+if exist "%RELEASE_SOURCE%" rmdir /s /q "%RELEASE_SOURCE%"
+mkdir "%RELEASE_SOURCE_BUILD%"
+xcopy "%RELEASE_OUTPUT%\*" "%RELEASE_SOURCE_BUILD%\" /e /i /y >nul
+copy /y "%APP_UPDATER_OUTPUT%\EMPIRE AT WAR Launcher Updater.exe" "%RELEASE_SOURCE_BUILD%\" >nul
+copy /y "%LAUNCHER_OUTPUT%\FocLauncher.dll" "%RELEASE_SOURCE_BUILD%\" >nul
+copy /y "%THEMING_OUTPUT%\FocLauncher.Theming.dll" "%RELEASE_SOURCE_BUILD%\" >nul
+copy /y "%THREADING_OUTPUT%\FocLauncher.Threading.dll" "%RELEASE_SOURCE_BUILD%\" >nul
 
+echo Select release channel: [1] Stable, [2] Beta, [3] Test.
+choice /C 123 /N
+if errorlevel 3 (set "APPLICATION_TYPE=Test") else if errorlevel 2 (set "APPLICATION_TYPE=Beta") else set "APPLICATION_TYPE=Stable"
 
-:createMetadata
-MetadataCreator.exe -o %METADATA_OUTPUT% -b %BUILD_CONFIG% -f %CURRENT_METADATA_LOCATION% -t %APPLICATION_TYPE% -m %INTEGRATION_MODE% -l %COPY_FILES_LOCATION%
-set CREATOR_STATUS=%ERRORLEVEL% 
-if %BUILD_STATUS%==0 goto createSuccess
-if not %CREATOR_STATUS%==0 goto fail
+echo Select metadata integration: [0] replace, [1] add/replace channel product.
+choice /C 01 /N
+if errorlevel 2 (set "INTEGRATION_MODE=1") else set "INTEGRATION_MODE=0"
 
-:createSuccess
-echo creating metadata was successful
-pause 
-goto commitChangesChoice
+if not exist "%RELEASE_FEED%" mkdir "%RELEASE_FEED%"
 
+"%METADATA_CREATOR%" -o "%RELEASE_FEED%" -b Release -s "%RELEASE_SOURCE%" -f "%UPDATE_METADATA_URL%" -r "%UPDATE_FILE_ROOT%" -t "%APPLICATION_TYPE%" -m %INTEGRATION_MODE% -l "%RELEASE_FEED%"
+if errorlevel 1 goto fail
 
-:commitChangesChoice
-
-echo "Shall the changes to %COPY_FILES_LOCATION% be commited"
-CHOICE /C YN
-IF %ERRORLEVEL% EQU 1 goto commitChanges
-exit /b 0
-
-:commitChanges
-
-cd %COPY_FILES_LOCATION%
-git add .
-git commit -m "Updated version for %APPLICATION_TYPE%"
-if not %BUILD_STATUS%==0 goto fail 
-
-echo commit created.
-echo pushing needs to be done manually.
+echo Release feed generated in:
+echo %RELEASE_FEED%
+echo Review generated files, then commit and push the release feed from the repository root.
 goto success
 
-
 :success
-echo operation finished
-pause
-exit /b 0 
+popd
+exit /b 0
 
+:fail
+popd
+echo Release operation failed.
+exit /b 1
 
-:fail 
-echo operation failed...
-pause 
+:missingReleaseFile
+popd
+echo Release staging input is missing. Rebuild the production projects first.
 exit /b 1

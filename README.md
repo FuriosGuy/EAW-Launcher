@@ -117,16 +117,38 @@ Settings. The About page is intentionally excluded from this screenshot set.
 The launcher checks this repository first for
 `releases/LauncherUpdateData.xml` and release files under the matching
 `releases/Stable`, `releases/Beta`, or `releases/Test` directory. Run
-`compileRelease.bat` to generate release metadata and layout. Existing
-installations temporarily fall back to the original update feed if the new
-repository feed is unavailable.
+`compileRelease.bat` to build and generate the feed locally. For normal
+releases, push a version tag such as `v2.0.0`; GitHub Actions builds the
+Windows package, creates the GitHub Release, and publishes the updater feed to
+the `master` branch automatically. `v2.0.0-beta` and `v2.0.0-test` publish to
+the matching preview channel and are marked prereleases.
+
+The GitHub Release ZIP is the initial/manual installer package. The launcher
+updater uses the raw `master/releases` feed, so the feed commit must remain
+available even when the GitHub Release page is not open. Existing installations
+temporarily fall back to the original update feed if the new repository feed
+is unavailable.
 
 ## Building
 
 The solution is `FocLauncher.sln`. The launcher targets Windows and uses the
 classic WPF/.NET Framework project structure. Build the host project or the
-full solution with Visual Studio/MSBuild. `compileRelease.bat` prepares release
-metadata and artifacts for the updater feed.
+full solution with Visual Studio/MSBuild. `compileRelease.bat` discovers an
+installed MSBuild, builds the selected configuration, and prepares release
+metadata. A push or pull request targeting `master` also runs the GitHub
+Actions build check in `.github/workflows/ci.yml`.
+
+Release tags automatically become four-part assembly versions through
+`tools/Set-LauncherVersion.ps1`. For a local versioned build, set
+`EAW_LAUNCHER_VERSION` before running `compileRelease.bat`.
+
+### Release checklist
+
+1. Commit and push the changes to `master`.
+2. Create and push a tag: `git tag v2.0.0; git push origin v2.0.0`.
+3. Wait for the `Build and publish launcher release` workflow.
+4. Confirm the ZIP is attached to the GitHub Release and the raw feed contains
+   the new channel files.
 
 ## Credits and licensing
 

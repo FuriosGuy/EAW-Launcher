@@ -6,7 +6,7 @@ namespace FocLauncher
 {
     public static class LauncherConstants
     {
-        public const string UpdateMetadataServerUrl = "https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/main/releases/";
+        public const string UpdateMetadataServerUrl = "https://raw.githubusercontent.com/FuriosGuy/EAW-Launcher/master/releases/";
         public const string LegacyUpdateMetadataServerUrl = "https://republicatwar.com/downloads/FocLauncher/";
 
         public const string ApplicationBaseVariable = "APPLICATIONBASE";
