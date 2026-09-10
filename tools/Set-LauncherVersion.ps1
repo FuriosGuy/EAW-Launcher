@@ -22,8 +22,13 @@ function Read-Utf8FilePreservingBom {
     $bytes = [System.IO.File]::ReadAllBytes($Path)
     $hasBom = $bytes.Length -ge 3 -and
         $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF
+    $text = ([System.Text.UTF8Encoding]::new($hasBom)).GetString($bytes)
+    while ($text.Length -gt 0 -and $text[0] -eq [char]0xFEFF) {
+        $text = $text.Substring(1)
+    }
+
     [pscustomobject]@{
-        Text = ([System.Text.UTF8Encoding]::new($hasBom)).GetString($bytes)
+        Text = $text
         Encoding = [System.Text.UTF8Encoding]::new($hasBom)
     }
 }
