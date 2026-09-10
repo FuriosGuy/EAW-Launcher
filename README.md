@@ -118,9 +118,9 @@ The launcher checks this repository first for
 `releases/LauncherUpdateData.xml` and release files under the matching
 `releases/Stable`, `releases/Beta`, or `releases/Test` directory. Run
 `compileRelease.bat` to build and generate the feed locally. For normal
-releases, push a version tag such as `v2.0.0`; GitHub Actions builds the
+releases, push a version tag such as `v1.0.0`; GitHub Actions builds the
 Windows package, creates the GitHub Release, and publishes the updater feed to
-the `master` branch automatically. `v2.0.0-beta` and `v2.0.0-test` publish to
+the `master` branch automatically. `v1.0.0-beta` and `v1.0.0-test` publish to
 the matching preview channel and are marked prereleases.
 
 The GitHub Release ZIP is the initial/manual installer package. The launcher
@@ -145,7 +145,7 @@ Release tags automatically become four-part assembly versions through
 ### Release checklist
 
 1. Commit and push the changes to `master`.
-2. Create and push a tag: `git tag v2.0.0; git push origin v2.0.0`.
+2. Create and push a tag: `git tag v1.0.0; git push origin v1.0.0`.
 3. Wait for the `Build and publish launcher release` workflow.
 4. Confirm the ZIP is attached to the GitHub Release and the raw feed contains
    the new channel files.

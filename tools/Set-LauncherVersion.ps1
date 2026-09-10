@@ -16,11 +16,34 @@ $normalizedVersion = '{0}.{1}.{2}.{3}' -f $parsedVersion.Major, $parsedVersion.M
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $changedFiles = [System.Collections.Generic.List[string]]::new()
 
+function Read-Utf8FilePreservingBom {
+    param([string]$Path)
+
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    $hasBom = $bytes.Length -ge 3 -and
+        $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF
+    [pscustomobject]@{
+        Text = ([System.Text.UTF8Encoding]::new($hasBom)).GetString($bytes)
+        Encoding = [System.Text.UTF8Encoding]::new($hasBom)
+    }
+}
+
+function Write-Utf8FilePreservingBom {
+    param(
+        [string]$Path,
+        [string]$Text,
+        [System.Text.Encoding]$Encoding
+    )
+
+    [System.IO.File]::WriteAllText($Path, $Text, $Encoding)
+}
+
 $assemblyFiles = Get-ChildItem -Path (Join-Path $repoRoot 'src'), (Join-Path $repoRoot 'tools') -Filter AssemblyInfo.cs -Recurse |
     Where-Object { $_.FullName -notmatch '\\SampleTheme\\' }
 
 foreach ($file in $assemblyFiles) {
-    $content = Get-Content -LiteralPath $file.FullName -Raw
+    $fileData = Read-Utf8FilePreservingBom -Path $file.FullName
+    $content = $fileData.Text
     $updated = [regex]::Replace($content, '(?m)^(\[assembly:\s*AssemblyVersion\(")[^"]+("\)\])', {
         param($match) $match.Groups[1].Value + $normalizedVersion + $match.Groups[2].Value
     })
@@ -29,20 +52,21 @@ foreach ($file in $assemblyFiles) {
     })
 
     if ($updated -ne $content) {
-        Set-Content -LiteralPath $file.FullName -Value $updated -NoNewline
+        Write-Utf8FilePreservingBom -Path $file.FullName -Text $updated -Encoding $fileData.Encoding
         $changedFiles.Add($file.FullName)
     }
 }
 
 $projectFiles = Get-ChildItem -Path (Join-Path $repoRoot 'src') -Filter *.csproj -Recurse
 foreach ($file in $projectFiles) {
-    $content = Get-Content -LiteralPath $file.FullName -Raw
+    $fileData = Read-Utf8FilePreservingBom -Path $file.FullName
+    $content = $fileData.Text
     $updated = [regex]::Replace($content, '(?m)(<ApplicationVersion>)[^<]+(</ApplicationVersion>)', {
         param($match) $match.Groups[1].Value + $normalizedVersion + $match.Groups[2].Value
     })
 
     if ($updated -ne $content) {
-        Set-Content -LiteralPath $file.FullName -Value $updated -NoNewline
+        Write-Utf8FilePreservingBom -Path $file.FullName -Text $updated -Encoding $fileData.Encoding
         $changedFiles.Add($file.FullName)
     }
 }

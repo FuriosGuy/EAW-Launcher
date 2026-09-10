@@ -7,7 +7,7 @@ Launcher. The launcher reads the feed from the `master` branch:
 
 `compileRelease.bat` is the local/manual release helper. It builds the full
 solution, finds MSBuild automatically, and generates the feed from the Release
-host output. Tagged pushes (`v2.0.0`, `v2.0.1-beta`, or `v2.0.1-test`) use
+host output. Tagged pushes (`v1.0.0`, `v1.0.1-beta`, or `v1.0.1-test`) use
 `.github/workflows/release.yml` to do the same work in GitHub Actions, publish
 the Windows ZIP as a GitHub Release asset, and commit the feed back to
 `master`.
