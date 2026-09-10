@@ -65,6 +65,8 @@ namespace FocLauncherHost.Dialogs
             Processes = new ObservableCollection<ILockingProcessInfo>(processes);
             ButtonText = Processes.Count == 1 ? "End Process" : "End Processes";
             InitializeComponent();
+            LoadThemeResources();
+            UseModernChrome();
 
             if (retry)
             {

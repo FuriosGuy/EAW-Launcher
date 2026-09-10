@@ -35,8 +35,8 @@
 
         <Style x:Key="SplashProgress" TargetType="ProgressBar">
             <Setter Property="Height" Value="5"/>
-            <Setter Property="Background" Value="#32131D2D"/>
-            <Setter Property="Foreground" Value="#FF76C7FF"/>
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ProgressBar">
@@ -68,7 +68,7 @@
         </Style>
     </FrameworkElement.Resources>
 
-    <Border Margin="10" Background="#F20E1520" BorderBrush="#586B8AA6" BorderThickness="1"
+    <Border Margin="10" Background="{DynamicResource OverlayBrush}" BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1"
             CornerRadius="22" Padding="1">
         <Border.Effect>
             <DropShadowEffect BlurRadius="28" ShadowDepth="8" Opacity="0.45" Color="#FF000000"/>
@@ -80,19 +80,19 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="#301C2B3D" CornerRadius="20,20,0,0" Padding="24,20,24,16">
+            <Border Grid.Row="0" Background="{DynamicResource TitleBarBrush}" CornerRadius="20,20,0,0" Padding="24,20,24,16">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="EMPIRE AT WAR" Foreground="#FFBBDFFF" FontFamily="Segoe UI"
+                        <TextBlock Text="EMPIRE AT WAR" Foreground="{DynamicResource TitleBarTextBrush}" FontFamily="Segoe UI"
                                    FontSize="13" FontWeight="SemiBold"/>
-                        <TextBlock Text="Launcher" Foreground="#FFF4F8FF" FontFamily="Segoe UI"
+                        <TextBlock Text="Launcher" Foreground="{DynamicResource TitleBarTextBrush}" FontFamily="Segoe UI"
                                    FontSize="30" FontWeight="Bold" Margin="0,2,0,0"/>
                     </StackPanel>
-                    <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#261C9FE8"
-                            BorderBrush="#5276C7F4" BorderThickness="1" CornerRadius="12" Padding="12,6">
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="{DynamicResource SelectedBrush}"
+                            BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1" CornerRadius="8" Padding="12,6">
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="7" Height="7" Fill="#FF7ED6FF" VerticalAlignment="Center" Margin="0,0,7,0"/>
-                            <TextBlock Text="STARTING" Foreground="#FFD8F3FF" FontFamily="Segoe UI"
+                            <Ellipse Width="7" Height="7" Fill="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                            <TextBlock Text="STARTING" Foreground="{DynamicResource SelectionTextBrush}" FontFamily="Segoe UI"
                                        FontSize="10" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Border>
@@ -106,8 +106,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Width="220" Height="220" CornerRadius="20" Background="#22101A28"
-                        BorderBrush="#345E7EA0" BorderThickness="1" HorizontalAlignment="Left">
+                <Border Grid.Column="0" Width="220" Height="220" CornerRadius="20" Background="{DynamicResource IconBackgroundBrush}"
+                        BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1" HorizontalAlignment="Left">
                     <Grid ClipToBounds="True">
                         <Image Source="Resources/splash.png" Stretch="Uniform" Margin="10"
                                RenderOptions.BitmapScalingMode="Fant"/>
@@ -115,7 +115,7 @@
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                     <GradientStop Color="#00101A28" Offset="0"/>
-                                    <GradientStop Color="#E6101826" Offset="1"/>
+                                    <GradientStop Color="#E6101010" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
@@ -123,40 +123,40 @@
                 </Border>
 
                 <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                    <TextBlock Text="Preparing your launcher" Foreground="#FFF4F8FF" FontFamily="Segoe UI"
+                    <TextBlock Text="Preparing your launcher" Foreground="{DynamicResource TextBrush}" FontFamily="Segoe UI"
                                FontSize="19" FontWeight="SemiBold"/>
-                    <TextBlock Text="Loading games, presets, and launcher services." Foreground="#BFD3E0F0"
+                    <TextBlock Text="Loading games, presets, and launcher services." Foreground="{DynamicResource TextSecondaryBrush}"
                                FontFamily="Segoe UI" FontSize="12" TextWrapping="Wrap" Margin="0,8,0,22"/>
-                    <Border Background="#26162130" BorderBrush="#334C6985" BorderThickness="1"
+                    <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
                             CornerRadius="12" Padding="14,12">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Grid Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,9,0">
-                                    <Ellipse x:Name="LoadingGlow" Fill="#FF69C9FF" Opacity="0.35"/>
-                                    <Ellipse Width="7" Height="7" Fill="#FFB9ECFF" HorizontalAlignment="Center"
+                                    <Ellipse x:Name="LoadingGlow" Fill="{DynamicResource PrimaryBrush}" Opacity="0.35"/>
+                                    <Ellipse Width="7" Height="7" Fill="{DynamicResource SelectionTextBrush}" HorizontalAlignment="Center"
                                              VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                                         <Ellipse.RenderTransform>
                                             <ScaleTransform x:Name="LoadingDotScale"/>
                                         </Ellipse.RenderTransform>
                                     </Ellipse>
                                 </Grid>
-                                <TextBlock Text="Working in the background" Foreground="#FFE5F2FF" FontFamily="Segoe UI"
+                                <TextBlock Text="Working in the background" Foreground="{DynamicResource TextBrush}" FontFamily="Segoe UI"
                                            FontSize="12" FontWeight="SemiBold"/>
                             </StackPanel>
                             <ProgressBar Style="{StaticResource SplashProgress}" IsIndeterminate="True" Margin="0,12,0,0"/>
-                            <TextBlock Text="{Binding ProgressText}" Foreground="#9FBBD0E5" FontFamily="Segoe UI"
+                            <TextBlock Text="{Binding ProgressText}" Foreground="{DynamicResource MutedTextBrush}" FontFamily="Segoe UI"
                                        FontSize="11" TextTrimming="CharacterEllipsis" Margin="0,8,0,0"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Grid>
 
-            <Border Grid.Row="2" Background="#26121B29" CornerRadius="0,0,20,20" Padding="24,12">
+            <Border Grid.Row="2" Background="{DynamicResource PanelBrush}" CornerRadius="0,0,20,20" Padding="24,12">
                 <Grid>
-                    <TextBlock Text="EMPIRE AT WAR Launcher" Foreground="#8FAEC5DC" FontFamily="Segoe UI" FontSize="10"
+                    <TextBlock Text="EMPIRE AT WAR Launcher" Foreground="{DynamicResource MutedTextBrush}" FontFamily="Segoe UI" FontSize="10"
                                VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <TextBlock Text="Icon © Exhumed" Foreground="#6F91A8BF" FontFamily="Segoe UI" FontSize="9"
+                        <TextBlock Text="Icon © Exhumed" Foreground="{DynamicResource MutedTextBrush}" FontFamily="Segoe UI" FontSize="9"
                                    VerticalAlignment="Center"/>
                         <Button Content="Cancel" MinWidth="76" Height="28" Margin="16,0,0,0" Padding="12,3"
                                 IsEnabled="{Binding Cancelable}" Click="OnCancel"

@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using FocLauncher.Theming;
 
 namespace FocLauncherHost.Dialogs
 {
@@ -38,6 +39,19 @@ namespace FocLauncherHost.Dialogs
             HostWindow.UseLayoutRounding = true;
             HostWindow.SnapsToDevicePixels = true;
             HostWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        protected void LoadThemeResources()
+        {
+            try
+            {
+                var themeUri = ThemeManager.GetSavedThemeResourceUri();
+                Resources.MergedDictionaries.Add(new ResourceDictionary { Source = themeUri });
+            }
+            catch
+            {
+                // Updater dialogs must remain usable if saved theme resources are unavailable.
+            }
         }
 
         [DllImport("User32", CharSet = CharSet.Auto)]

@@ -35,6 +35,7 @@ namespace FocLauncherHost.Dialogs
         public UpdateResultDialog(string title, string message)
         {
             InitializeComponent();
+            LoadThemeResources();
             UseModernChrome();
             Title = title;
             Message = message;

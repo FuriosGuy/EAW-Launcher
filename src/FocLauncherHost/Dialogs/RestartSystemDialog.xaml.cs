@@ -22,6 +22,8 @@ namespace FocLauncherHost.Dialogs
         public RestartSystemDialog(string message)
         {
             InitializeComponent();
+            LoadThemeResources();
+            UseModernChrome();
             ExceptionMessage = message;
         }
 

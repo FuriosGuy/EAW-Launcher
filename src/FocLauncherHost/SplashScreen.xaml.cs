@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using FocLauncher;
+using FocLauncher.Theming;
 
 namespace FocLauncherHost
 {
@@ -71,6 +72,20 @@ namespace FocLauncherHost
         public SplashScreen()
         {
             InitializeComponent();
+            LoadThemeResources();
+        }
+
+        private void LoadThemeResources()
+        {
+            try
+            {
+                var themeUri = ThemeManager.GetSavedThemeResourceUri();
+                Resources.MergedDictionaries.Add(new ResourceDictionary { Source = themeUri });
+            }
+            catch
+            {
+                // Loading screen must remain usable if saved theme resources are unavailable.
+            }
         }
 
         public Task HideAnimationAsync()

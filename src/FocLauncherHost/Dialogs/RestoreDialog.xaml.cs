@@ -44,6 +44,8 @@ namespace FocLauncherHost.Dialogs
         public RestoreDialog(bool requiresRestore)
         {
             InitializeComponent();
+            LoadThemeResources();
+            UseModernChrome();
             Message = requiresRestore ? RequiresRestoreMessage : WasRestoredMessage;
             RequiresRestore = requiresRestore;
         }

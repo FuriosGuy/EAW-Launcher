@@ -8,6 +8,7 @@ namespace FocLauncherHost.Dialogs
         public UpdateSuccessDialog()
         {
             InitializeComponent();
+            LoadThemeResources();
             UseModernChrome();
         }
 

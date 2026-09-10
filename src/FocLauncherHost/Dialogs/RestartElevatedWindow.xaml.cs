@@ -14,6 +14,8 @@ namespace FocLauncherHost.Dialogs
         public RestartElevatedWindow()
         {
             InitializeComponent();
+            LoadThemeResources();
+            UseModernChrome();
         }
 
         public override void ShowDialog()
