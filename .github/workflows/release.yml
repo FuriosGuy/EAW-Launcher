@@ -141,9 +141,12 @@ jobs:
           Copy-Item README.md, LICENSE, THIRD-PARTY-NOTICES.txt -Destination $stage -Force
           Get-ChildItem -LiteralPath $stage -Recurse -Filter '*.pdb' | Remove-Item -Force
 
-          $zip = Join-Path $artifactRoot "EMPIRE AT WAR Launcher-$env:RELEASE_TAG-windows.zip"
+          $zip = Join-Path $artifactRoot "$env:RELEASE_TAG-windows.zip"
           Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -CompressionLevel Optimal
+          $launcher = Join-Path $artifactRoot "$env:RELEASE_TAG.exe"
+          Copy-Item -LiteralPath (Join-Path $stage 'EMPIRE AT WAR Launcher.exe') -Destination $launcher -Force
           "zip=$zip" >> $env:GITHUB_OUTPUT
+          "launcher=$launcher" >> $env:GITHUB_OUTPUT
 
       - name: Publish updater feed to master
         shell: pwsh
@@ -182,11 +185,12 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
           RELEASE_PRERELEASE: ${{ steps.release-info.outputs.prerelease }}
           RELEASE_ZIP: ${{ steps.package.outputs.zip }}
+          RELEASE_LAUNCHER: ${{ steps.package.outputs.launcher }}
         run: |
           $arguments = @(
-            'release', 'create', $env:RELEASE_TAG, $env:RELEASE_ZIP,
+            'release', 'create', $env:RELEASE_TAG, $env:RELEASE_ZIP, $env:RELEASE_LAUNCHER,
             '--repo', $env:GITHUB_REPOSITORY,
-            '--title', "EMPIRE AT WAR Launcher $env:RELEASE_TAG",
+            '--title', $env:RELEASE_TAG,
             '--generate-notes'
           )
           if ($env:RELEASE_PRERELEASE -eq 'true') {
