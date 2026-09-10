@@ -8,6 +8,14 @@ Project repository: <https://github.com/FuriosGuy/EAW-Launcher>
 
 ![EMPIRE AT WAR Launcher](img/launcher.png "EMPIRE AT WAR Launcher")
 
+## Screenshots
+
+Current launcher views:
+
+![Edit preset](img/launcher-edit-preset.png "Edit preset")
+
+![Settings](img/launcher-settings.png "Settings")
+
 ## Features
 
 - Launch Empire at War and Forces of Corruption.
