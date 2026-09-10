@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:window="clr-namespace:FocLauncher"
+                    xmlns:controls="clr-namespace:FocLauncher.Controls"
                     xmlns:core="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
                     xmlns:theming="clr-namespace:FocLauncher.Theming"
                     xmlns:focLauncher="clr-namespace:FocLauncher;assembly=FocLauncher.Core"
@@ -52,20 +53,11 @@
                                                          Background="Transparent"
                                                          TextElement.Foreground="{DynamicResource TitleBarTextBrush}">
                             <Grid>
-                               <Image x:Name="TitleBarArtworkImage" Source="{Binding ActiveGameBackgroundImage}" Stretch="UniformToFill" Opacity="0.96"
-                                       Effect="{DynamicResource AcrylicBlurEffect}" IsHitTestVisible="False">
-                                    <Image.Style>
-                                        <Style TargetType="Image">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding UseGameArtwork}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Image.Style>
-                                </Image>
-                                <Border Background="{DynamicResource TitleBarTranslucentBrush}" IsHitTestVisible="False"/>
+                               <controls:AcrylicBackdrop x:Name="TitleBarBackdrop"
+                                                         Style="{DynamicResource AcrylicBackdropStyle}"
+                                                         Background="{DynamicResource TitleBarTranslucentBrush}"
+                                                         BorderThickness="0" CornerRadius="0"
+                                                         IsHitTestVisible="False"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="AppIcon"/>

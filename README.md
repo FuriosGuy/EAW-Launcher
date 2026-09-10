@@ -6,7 +6,7 @@ artwork, themes, launch options, and Steam Workshop content.
 
 Project repository: <https://github.com/FuriosGuy/EAW-Launcher>
 
-![EMPIRE AT WAR Launcher](https://github.com/FuriosGuy/EAW-Launcher/blob/main/img/launcher.png "EMPIRE AT WAR Launcher")
+![EMPIRE AT WAR Launcher](img/launcher.png "EMPIRE AT WAR Launcher")
 
 ## Features
 
